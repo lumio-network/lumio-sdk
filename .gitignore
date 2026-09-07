@@ -1,0 +1,22 @@
+# deps
+node_modules
+.pnpm-store
+
+# build output
+dist
+.turbo
+
+# logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# env
+.env
+.env.local
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea
+*.swp

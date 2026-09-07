@@ -1,0 +1,67 @@
+/* Lumio Design Tokens v1.0.0
+   Generated from design-tokens.json — keep both in sync. */
+
+:root {
+  /* Brand */
+  --lumio-ink: #12193A;
+  --lumio-paper: #F4F2ED;
+  --lumio-lumen: #F2A63D;
+  --lumio-lumen-dim: #B97A22;
+
+  /* Semantic (bright — for dark surfaces, large text, graphics/dataviz) */
+  --lumio-teal: #1B8A72;
+  --lumio-coral: #E2543D;
+  --lumio-sky: #4C7EF2;
+
+  /* Semantic (on-light — for body text/small UI on Paper, meets 4.5:1) */
+  --lumio-teal-on-light: #146857;
+  --lumio-coral-on-light: #C23E29;
+  --lumio-sky-on-light: #2E5FD1;
+
+  /* Neutral scale — dark mode surfaces */
+  --lumio-ink-950: #0B0F26;
+  --lumio-ink-900: #12193A;
+  --lumio-ink-800: #1B234A;
+  --lumio-ink-700: #2A3560;
+  --lumio-ink-600: #3D4977;
+  --lumio-ink-400: #8891B8;
+
+  /* Neutral scale — light mode surfaces */
+  --lumio-paper-50: #F4F2ED;
+  --lumio-paper-100: #EDEAE1;
+  --lumio-paper-200: #DDD8CC;
+  --lumio-paper-400: #8A8577;
+  --lumio-paper-600: #5B5748;
+
+  /* Typography */
+  --lumio-font-display: "Fraunces", Georgia, serif;
+  --lumio-font-ui: "IBM Plex Sans", -apple-system, sans-serif;
+  --lumio-font-mono: "IBM Plex Mono", ui-monospace, monospace;
+
+  --lumio-text-display-xl: 500 64px/1.05 var(--lumio-font-display);
+  --lumio-text-display-l:  500 44px/1.1  var(--lumio-font-display);
+  --lumio-text-heading-l:  600 28px/1.25 var(--lumio-font-ui);
+  --lumio-text-heading-m:  600 22px/1.3  var(--lumio-font-ui);
+  --lumio-text-heading-s:  600 18px/1.35 var(--lumio-font-ui);
+  --lumio-text-body:       400 16px/1.55 var(--lumio-font-ui);
+  --lumio-text-body-s:     400 14px/1.5  var(--lumio-font-ui);
+  --lumio-text-caption:    500 12px/1.4  var(--lumio-font-ui);
+  --lumio-text-data:       500 15px/1.4  var(--lumio-font-mono);
+
+  /* Radius */
+  --lumio-radius-s: 6px;
+  --lumio-radius-m: 10px;
+  --lumio-radius-l: 16px;
+  --lumio-radius-round: 999px;
+
+  /* Shadow (dark-mode-first product; keep shadows subtle, ink-tinted not pure black) */
+  --lumio-shadow-s: 0 1px 2px rgba(11, 15, 38, 0.24);
+  --lumio-shadow-m: 0 4px 12px rgba(11, 15, 38, 0.32);
+  --lumio-shadow-l: 0 12px 32px rgba(11, 15, 38, 0.40);
+
+  /* Motion */
+  --lumio-ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+  --lumio-duration-fast: 120ms;
+  --lumio-duration-base: 220ms;
+  --lumio-duration-slow: 400ms;
+}

@@ -1,0 +1,80 @@
+{
+  "meta": {
+    "brand": "Lumio",
+    "version": "1.0.0",
+    "concept": "Ledger of Light — the ring is the full savings circle, the lit dot is the member whose turn it is. Nothing hidden, nothing owed silently.",
+    "wcag_target": "AA minimum for all text pairings; AAA for primary brand pairings"
+  },
+  "color": {
+    "brand": {
+      "ink": { "value": "#12193A", "role": "Primary dark / brand foundation. Dark-mode base surface, light-mode primary text." },
+      "paper": { "value": "#F4F2ED", "role": "Primary light / brand foundation. Light-mode base surface, dark-mode primary text." },
+      "lumen": { "value": "#F2A63D", "role": "Primary accent. The 'lit' color — CTAs, the symbol's dot, highlights, focus states. Use generously on dark surfaces, sparingly on light ones." },
+      "lumen-dim": { "value": "#B97A22", "role": "Lumen for large text / icons on Paper only (3.2:1) — never for small body text on light backgrounds." }
+    },
+    "semantic": {
+      "teal": { "value": "#1B8A72", "on_light_text": "#146857", "role": "Positive / growth / dividends paid / confirmed on-chain." },
+      "coral": { "value": "#E2543D", "on_light_text": "#C23E29", "role": "Errors, destructive actions, overdue contributions." },
+      "sky":   { "value": "#4C7EF2", "on_light_text": "#2E5FD1", "role": "Informational, links, secondary interactive elements." }
+    },
+    "neutral_dark": {
+      "ink-950": "#0B0F26",
+      "ink-900": "#12193A",
+      "ink-800": "#1B234A",
+      "ink-700": "#2A3560",
+      "ink-600": "#3D4977",
+      "ink-400": "#8891B8"
+    },
+    "neutral_light": {
+      "paper-50": "#F4F2ED",
+      "paper-100": "#EDEAE1",
+      "paper-200": "#DDD8CC",
+      "paper-400": "#8A8577",
+      "paper-600": "#5B5748"
+    },
+    "contrast_ratios": {
+      "ink900_on_paper50": 15.31,
+      "paper50_on_ink900": 15.31,
+      "lumen_on_ink900": 8.40,
+      "ink900_on_lumen_button": 8.40,
+      "sky_on_ink900": 4.55,
+      "coral_on_ink900": 4.54,
+      "teal_on_ink900": 4.02,
+      "teal_on_light_on_paper50": 5.96,
+      "coral_on_light_on_paper50": 4.68,
+      "sky_on_light_on_paper50": 5.11,
+      "lumen_dim_on_paper50": 3.20,
+      "paper600_on_paper50": 6.47
+    }
+  },
+  "typography": {
+    "families": {
+      "display": { "name": "Fraunces", "usage": "Marketing headlines, editorial moments, section titles on landing pages only. Never in product UI.", "license": "SIL Open Font License", "source": "Google Fonts" },
+      "ui": { "name": "IBM Plex Sans", "usage": "All product UI, body copy, buttons, navigation, forms.", "license": "SIL Open Font License", "source": "Google Fonts / IBM" },
+      "mono": { "name": "IBM Plex Mono", "usage": "Wallet addresses, contract IDs, transaction hashes, amounts in tables, code.", "license": "SIL Open Font License", "source": "Google Fonts / IBM" }
+    },
+    "scale": {
+      "display-xl": { "size": "64px", "line_height": "1.05", "weight": 500, "family": "display" },
+      "display-l":  { "size": "44px", "line_height": "1.1",  "weight": 500, "family": "display" },
+      "heading-l":  { "size": "28px", "line_height": "1.25", "weight": 600, "family": "ui" },
+      "heading-m":  { "size": "22px", "line_height": "1.3",  "weight": 600, "family": "ui" },
+      "heading-s":  { "size": "18px", "line_height": "1.35", "weight": 600, "family": "ui" },
+      "body":       { "size": "16px", "line_height": "1.55", "weight": 400, "family": "ui" },
+      "body-s":     { "size": "14px", "line_height": "1.5",  "weight": 400, "family": "ui" },
+      "caption":    { "size": "12px", "line_height": "1.4",  "weight": 500, "family": "ui" },
+      "data":       { "size": "15px", "line_height": "1.4",  "weight": 500, "family": "mono" }
+    }
+  },
+  "logo": {
+    "symbol_concept": "A ring (the full contribution cycle / the group) with one lit dot on its edge (the member currently receiving the payout). Transparent by construction — everyone can see whose turn it is.",
+    "minimum_sizes": { "favicon": "16px", "app_icon": "512px master, exported down", "print_symbol_alone": "8mm width" },
+    "clearspace_rule": "Clearspace around any lockup = the height of the symbol's ring, on all sides.",
+    "do_not": [
+      "Do not recolor the ring and dot to the same color outside approved monochrome variants",
+      "Do not stretch or skew the wordmark",
+      "Do not rotate the symbol",
+      "Do not place the color lockup on a busy photographic background — use a monochrome variant instead",
+      "Do not recreate the wordmark by typing 'Lumio' in a generic font — use the outlined files"
+    ]
+  }
+}
