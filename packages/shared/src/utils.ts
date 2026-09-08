@@ -30,17 +30,52 @@ export function formatAmount(amount: Amount, decimals = STELLAR_DECIMALS): strin
 }
 
 /**
+ * Thrown by {@link parseAmount} when the input string is not a valid decimal
+ * amount or has more fractional digits than the target precision allows.
+ */
+export class InvalidAmountError extends Error {
+  constructor(value: string) {
+    super(`Invalid amount "${value}"`);
+    this.name = "InvalidAmountError";
+  }
+}
+
+/**
  * Parse a human decimal string into a raw on-chain integer amount.
  *
+ * Accepted format: an optional leading `-`, one or more decimal digits,
+ * optionally followed by a single `.` and one or more decimal digits.
+ * Anything else — empty strings, whitespace-only, multiple dots, scientific
+ * notation (`1e3`), underscores (`1_000`), currency symbols (`$5`), etc. —
+ * throws {@link InvalidAmountError} naming the bad value.
+ *
+ * Precision policy: inputs with more fractional digits than `decimals` are
+ * rejected (throw {@link InvalidAmountError}) rather than silently truncated,
+ * so callers always know exactly what value was stored on-chain.
+ *
  * @example parseAmount("1.25") // 12_500_000n
+ * @throws {InvalidAmountError} if `value` is malformed or over-precise
  */
 export function parseAmount(value: string, decimals = STELLAR_DECIMALS): Amount {
+  // Strict format: optional -, digits, optional (.digits)
+  const VALID = /^-?\d+(\.\d+)?$/;
+  if (!VALID.test(value.trim())) {
+    throw new InvalidAmountError(value);
+  }
+
   const trimmed = value.trim();
   const negative = trimmed.startsWith("-");
   const unsigned = negative ? trimmed.slice(1) : trimmed;
-  const [whole = "0", frac = ""] = unsigned.split(".");
-  const fracPadded = (frac + "0".repeat(decimals)).slice(0, decimals);
-  const raw = BigInt(whole || "0") * 10n ** BigInt(decimals) + BigInt(fracPadded || "0");
+  const dotIndex = unsigned.indexOf(".");
+  const whole = dotIndex === -1 ? unsigned : unsigned.slice(0, dotIndex);
+  const frac = dotIndex === -1 ? "" : unsigned.slice(dotIndex + 1);
+
+  if (frac.length > decimals) {
+    throw new InvalidAmountError(value);
+  }
+
+  const fracPadded = frac.padEnd(decimals, "0");
+  const raw = BigInt(whole) * 10n ** BigInt(decimals) + BigInt(fracPadded);
   return negative ? -raw : raw;
 }
 
