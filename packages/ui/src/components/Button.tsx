@@ -25,7 +25,7 @@ const SIZES: Record<ButtonSize, string> = {
  * The primary action control. Amber ("lumen") by default — the one accent the
  * design language reserves for the single most important action on a surface.
  */
-export function Button({ variant = "primary", size = "md", className, ...props }: ButtonProps) {
+export function Button({ variant = "primary", size = "md", type = "button", className, ...props }: ButtonProps) {
   return (
     <button
       className={cn(
