@@ -15,6 +15,39 @@ describe("truncateAddress", () => {
   it("leaves short addresses untouched", () => {
     expect(truncateAddress("GABC", 4)).toBe("GABC");
   });
+
+  it("throws RangeError for visible = 0 (slice(-0) bug)", () => {
+    expect(() => truncateAddress("GABCDEFGHIJKLMNOPQRSTUVWXYZ", 0)).toThrow(RangeError);
+    expect(() => truncateAddress("GABCDEFGHIJKLMNOPQRSTUVWXYZ", 0)).toThrow(
+      "visible must be a positive integer",
+    );
+  });
+
+  it("throws RangeError for negative visible", () => {
+    expect(() => truncateAddress("GABCDEFGHIJKLMNOPQRSTUVWXYZ", -2)).toThrow(RangeError);
+    expect(() => truncateAddress("GABCDEFGHIJKLMNOPQRSTUVWXYZ", -2)).toThrow(
+      "visible must be a positive integer",
+    );
+  });
+
+  it("throws RangeError for non-integer visible", () => {
+    expect(() => truncateAddress("GABCDEFGHIJKLMNOPQRSTUVWXYZ", 1.5)).toThrow(RangeError);
+    expect(() => truncateAddress("GABCDEFGHIJKLMNOPQRSTUVWXYZ", 1.5)).toThrow(
+      "visible must be a positive integer",
+    );
+  });
+
+  it("throws RangeError for non-finite visible (NaN / Infinity)", () => {
+    expect(() => truncateAddress("GABCDEFGHIJKLMNOPQRSTUVWXYZ", NaN)).toThrow(RangeError);
+    expect(() => truncateAddress("GABCDEFGHIJKLMNOPQRSTUVWXYZ", Infinity)).toThrow(RangeError);
+  });
+
+  it("never returns the full untruncated address when visible <= 0", () => {
+    const addr = "GABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    for (const v of [0, -1, -2]) {
+      expect(() => truncateAddress(addr, v)).toThrow(RangeError);
+    }
+  });
 });
 
 describe("formatAmount / parseAmount", () => {
@@ -92,5 +125,36 @@ describe("approvalRate", () => {
     expect(approvalRate(3, 1)).toBe(75);
     expect(approvalRate(0, 0)).toBe(0);
     expect(approvalRate(1, 2)).toBe(33.3);
+  });
+
+  it("throws RangeError for negative yes", () => {
+    expect(() => approvalRate(-1, 3)).toThrow(RangeError);
+    expect(() => approvalRate(-1, 3)).toThrow("yes must be a non-negative finite number");
+  });
+
+  it("throws RangeError for negative no", () => {
+    expect(() => approvalRate(3, -1)).toThrow(RangeError);
+    expect(() => approvalRate(3, -1)).toThrow("no must be a non-negative finite number");
+  });
+
+  it("throws RangeError for NaN yes", () => {
+    expect(() => approvalRate(NaN, 1)).toThrow(RangeError);
+    expect(() => approvalRate(NaN, 1)).toThrow("yes must be a non-negative finite number");
+  });
+
+  it("throws RangeError for NaN no", () => {
+    expect(() => approvalRate(1, NaN)).toThrow(RangeError);
+    expect(() => approvalRate(1, NaN)).toThrow("no must be a non-negative finite number");
+  });
+
+  it("throws RangeError for Infinity inputs", () => {
+    expect(() => approvalRate(Infinity, 1)).toThrow(RangeError);
+    expect(() => approvalRate(1, Infinity)).toThrow(RangeError);
+  });
+
+  it("never returns a value outside 0–100 for valid inputs", () => {
+    expect(approvalRate(0, 5)).toBe(0);
+    expect(approvalRate(5, 0)).toBe(100);
+    expect(approvalRate(3, 1)).toBe(75);
   });
 });

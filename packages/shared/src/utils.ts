@@ -6,8 +6,13 @@ export const STELLAR_DECIMALS = 7;
 /**
  * Shorten an address for display, e.g. `truncateAddress("GABC…", 4)` → `"GABC…WXYZ"`.
  * Returns the address unchanged if it is already short enough.
+ *
+ * @throws {RangeError} if `visible` is not a positive finite integer.
  */
 export function truncateAddress(address: Address, visible = 4): string {
+  if (!Number.isFinite(visible) || !Number.isInteger(visible) || visible <= 0) {
+    throw new RangeError(`visible must be a positive integer, got ${visible}`);
+  }
   if (address.length <= visible * 2 + 1) return address;
   return `${address.slice(0, visible)}…${address.slice(-visible)}`;
 }
@@ -83,8 +88,16 @@ export function parseAmount(value: string, decimals = STELLAR_DECIMALS): Amount 
  * Percentage of yes-votes among decisive (yes + no) votes, 0–100.
  * Abstentions are excluded from the denominator. Returns 0 when there are no
  * decisive votes.
+ *
+ * @throws {RangeError} if `yes` or `no` is negative or non-finite (NaN / ±Infinity).
  */
 export function approvalRate(yes: number, no: number, decimalPlaces = 1): number {
+  if (!Number.isFinite(yes) || yes < 0) {
+    throw new RangeError(`yes must be a non-negative finite number, got ${yes}`);
+  }
+  if (!Number.isFinite(no) || no < 0) {
+    throw new RangeError(`no must be a non-negative finite number, got ${no}`);
+  }
   const total = yes + no;
   if (total === 0) return 0;
   const factor = 10 ** decimalPlaces;
