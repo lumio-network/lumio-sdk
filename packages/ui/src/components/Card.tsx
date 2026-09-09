@@ -21,7 +21,10 @@ export type CardTitleProps = HTMLAttributes<HTMLHeadingElement>;
 /** The heading slot for a {@link Card}. */
 export function CardTitle({ className, ...props }: CardTitleProps) {
   return (
-    <h3 className={cn("font-display text-heading-m font-semibold text-paper", className)} {...props} />
+    <h3
+      className={cn("font-display text-heading-m font-semibold text-paper", className)}
+      {...props}
+    />
   );
 }
 

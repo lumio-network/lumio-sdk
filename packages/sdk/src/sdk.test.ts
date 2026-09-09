@@ -39,9 +39,9 @@ describe("LumioClient", () => {
     await expect(lumio.treasury.deposit(contractIds.treasury, 1n)).rejects.toBeInstanceOf(
       NotImplementedError,
     );
-    await expect(lumio.governance.createProposal(contractIds.governance, "Raise dues")).rejects.toBeInstanceOf(
-      NotImplementedError,
-    );
+    await expect(
+      lumio.governance.createProposal(contractIds.governance, "Raise dues"),
+    ).rejects.toBeInstanceOf(NotImplementedError);
     await expect(lumio.dividends.fund(1n)).rejects.toBeInstanceOf(NotImplementedError);
     await expect(lumio.voting.castVote(1, contractIds.voting, "yes")).rejects.toBeInstanceOf(
       NotImplementedError,

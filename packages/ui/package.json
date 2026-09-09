@@ -1,9 +1,29 @@
 {
   "name": "@lumio/ui",
   "version": "0.1.0",
-  "private": true,
   "license": "Apache-2.0",
   "description": "Lumio design-system React components and Tailwind preset (\"Ledger of Light\").",
+  "keywords": [
+    "lumio",
+    "design-system",
+    "react",
+    "tailwind",
+    "components",
+    "design-tokens"
+  ],
+  "author": "Lumio Network",
+  "homepage": "https://github.com/lumio-network/lumio-sdk/tree/main/packages/ui#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lumio-network/lumio-sdk.git",
+    "directory": "packages/ui"
+  },
+  "bugs": {
+    "url": "https://github.com/lumio-network/lumio-sdk/issues"
+  },
+  "sideEffects": [
+    "**/*.css"
+  ],
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
@@ -18,7 +38,15 @@
     "./tokens/design-tokens.css": "./src/tokens/design-tokens.css",
     "./tokens/design-tokens.json": "./src/tokens/design-tokens.json"
   },
-  "files": ["dist", "src/tokens"],
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "dist",
+    "src/tokens",
+    "README.md",
+    "LICENSE"
+  ],
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "typecheck": "tsc -p tsconfig.json --noEmit",

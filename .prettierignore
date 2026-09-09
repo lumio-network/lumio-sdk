@@ -3,3 +3,7 @@ node_modules
 .turbo
 pnpm-lock.yaml
 *.md
+
+# Brand foundation — copied verbatim, never reformatted.
+packages/ui/src/tokens/design-tokens.css
+packages/ui/src/tokens/design-tokens.json
