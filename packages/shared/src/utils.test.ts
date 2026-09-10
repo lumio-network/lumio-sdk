@@ -4,8 +4,11 @@ import {
   formatAmount,
   parseAmount,
   approvalRate,
+  getNetwork,
+  isValidAddress,
   InvalidAmountError,
 } from "./utils";
+import { NETWORKS } from "./types";
 
 describe("truncateAddress", () => {
   it("shortens long addresses with an ellipsis", () => {
@@ -156,5 +159,62 @@ describe("approvalRate", () => {
     expect(approvalRate(0, 5)).toBe(0);
     expect(approvalRate(5, 0)).toBe(100);
     expect(approvalRate(3, 1)).toBe(75);
+  });
+});
+
+describe("getNetwork", () => {
+  it("returns the matching NetworkConfig for testnet", () => {
+    const config = getNetwork("testnet");
+    expect(config.rpcUrl).toBe("https://soroban-testnet.stellar.org");
+    expect(config.networkPassphrase).toBe("Test SDF Network ; September 2015");
+  });
+
+  it("returns the matching NetworkConfig for futurenet", () => {
+    const config = getNetwork("futurenet");
+    expect(config.rpcUrl).toBe("https://rpc-futurenet.stellar.org");
+  });
+
+  it("returns the matching NetworkConfig for mainnet", () => {
+    const config = getNetwork("mainnet");
+    expect(config.rpcUrl).toBe("https://mainnet.sorobanrpc.com");
+  });
+
+  it("returns the same object reference as NETWORKS[name]", () => {
+    expect(getNetwork("testnet")).toBe(NETWORKS.testnet);
+    expect(getNetwork("mainnet")).toBe(NETWORKS.mainnet);
+  });
+});
+
+describe("isValidAddress", () => {
+  it("accepts a well-formed G... public key (56 chars, base32)", () => {
+    expect(isValidAddress("GABC2DEFGHIJKLMNOPQRSTUVWXYZ234567ABCDEFGHIJKLMNOPQRSTUV")).toBe(true);
+  });
+
+  it("accepts a well-formed C... contract id (56 chars, base32)", () => {
+    expect(isValidAddress("CTREASURY000000000000000000000000000000000000000000000000")).toBe(false); // 0 not base32
+    expect(isValidAddress("CTREASURYBCDEFGHIJKLMNOPQRSTUVWXYZ234567ABCDEFGHIJKLMNOP")).toBe(true);
+  });
+
+  it("rejects an address that is too short", () => {
+    expect(isValidAddress("GABCDE")).toBe(false);
+  });
+
+  it("rejects an address that is too long", () => {
+    expect(isValidAddress("G" + "A".repeat(56))).toBe(false);
+  });
+
+  it("rejects an address starting with an invalid prefix", () => {
+    expect(isValidAddress("XABC2DEFGHIJKLMNOPQRSTUVWXYZ234567ABCDEFGHIJKLMNOPQRSTUV")).toBe(false);
+    expect(isValidAddress("SABC2DEFGHIJKLMNOPQRSTUVWXYZ234567ABCDEFGHIJKLMNOPQRSTUV")).toBe(false);
+  });
+
+  it("rejects an address containing non-base32 characters", () => {
+    // '0', '1', '8', '9' are not valid base32 chars
+    expect(isValidAddress("G0BC2DEFGHIJKLMNOPQRSTUVWXYZ234567ABCDEFGHIJKLMNOPQRSTUV")).toBe(false);
+    expect(isValidAddress("GABC2DEFGHIJKLMNOPQRSTUVWXYZ234567ABCDEFGHIJKLMNOPQRSTU1")).toBe(false);
+  });
+
+  it("rejects an empty string", () => {
+    expect(isValidAddress("")).toBe(false);
   });
 });

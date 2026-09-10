@@ -11,9 +11,9 @@ Part of [Lumio](https://github.com/lumio-network) — an open-source cooperative
 
 | Package        | Name             | Responsibility                                                             |
 | -------------- | ---------------- | -------------------------------------------------------------------------- |
-| `packages/shared` | `@lumio/shared` | Shared types + utils used by `sdk`, `ui`, and every `lumio-app` package.   |
-| `packages/sdk`    | `@lumio/sdk`    | Contract client — one module per Soroban contract, wrapping RPC calls.     |
-| `packages/ui`     | `@lumio/ui`     | Shared component library + design tokens (the "Ledger of Light" system).   |
+| `packages/shared` | `@lumio/shared` | Shared types + utils used by `sdk`, `ui`, and every `lumio-app` package. · [README](./packages/shared/README.md) |
+| `packages/sdk`    | `@lumio/sdk`    | Contract client — one module per Soroban contract, wrapping RPC calls. · [README](./packages/sdk/README.md)     |
+| `packages/ui`     | `@lumio/ui`     | Shared component library + design tokens (the "Ledger of Light" system). · [README](./packages/ui/README.md)    |
 
 `sdk` and `ui` depend on `shared`. All three are consumed by `lumio-app`.
 

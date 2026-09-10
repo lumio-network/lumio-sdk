@@ -1,4 +1,5 @@
-import type { Address, Amount } from "./types";
+import type { Address, Amount, NetworkConfig, NetworkName } from "./types";
+import { NETWORKS } from "./types";
 
 /** Number of decimal places Stellar uses for native amounts. */
 export const STELLAR_DECIMALS = 7;
@@ -102,4 +103,28 @@ export function approvalRate(yes: number, no: number, decimalPlaces = 1): number
   if (total === 0) return 0;
   const factor = 10 ** decimalPlaces;
   return Math.round((yes / total) * 100 * factor) / factor;
+}
+
+/**
+ * Resolve a {@link NetworkConfig} by its well-known name.
+ *
+ * @example getNetwork("testnet") // { rpcUrl: "https://soroban-testnet.stellar.org", ... }
+ */
+export function getNetwork(name: NetworkName): NetworkConfig {
+  return NETWORKS[name];
+}
+
+/**
+ * A lightweight format guard for Stellar addresses (public keys and contract ids).
+ *
+ * Returns `true` when `value` matches the shape of a well-formed Stellar strkey:
+ * - 56 characters long
+ * - Starts with `G` (ed25519 public key) or `C` (contract id)
+ * - Contains only base32 characters (A–Z and 2–7)
+ *
+ * **Limitation:** this is a shape check only — it does not verify the Stellar
+ * strkey checksum or confirm the address exists on-chain.
+ */
+export function isValidAddress(value: string): boolean {
+  return /^[GC][A-Z2-7]{55}$/.test(value);
 }
