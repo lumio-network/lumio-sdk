@@ -1,12 +1,28 @@
 {
   "name": "@lumio/shared",
   "version": "0.1.0",
-  "private": true,
   "license": "Apache-2.0",
   "description": "Shared types and utilities for the Lumio platform.",
-  "main": "./dist/cjs/index.js",
-  "module": "./dist/esm/index.js",
-  "types": "./dist/cjs/index.d.ts",
+  "keywords": [
+    "lumio",
+    "stellar",
+    "soroban",
+    "cooperative-finance",
+    "types"
+  ],
+  "author": "Lumio Network",
+  "homepage": "https://github.com/lumio-network/lumio-sdk/tree/main/packages/shared#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lumio-network/lumio-sdk.git",
+    "directory": "packages/shared"
+  },
+  "bugs": {
+    "url": "https://github.com/lumio-network/lumio-sdk/issues"
+  },
+  "sideEffects": false,
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "import": {
@@ -19,8 +35,13 @@
       }
     }
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "files": [
-    "dist"
+    "dist",
+    "README.md",
+    "LICENSE"
   ],
   "scripts": {
     "build": "tsc -p tsconfig.json && tsc -p tsconfig.esm.json",
