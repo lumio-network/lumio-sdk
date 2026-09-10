@@ -66,6 +66,13 @@ lumio-sdk/
 └── .github/workflows/ci.yml
 ```
 
+## Publishing
+
+The three packages publish to npm under the `@lumio` scope, versioned together via
+[Changesets](https://github.com/changesets/changesets). See [`PUBLISHING.md`](./PUBLISHING.md) for
+the release runbook. (Not yet published — the release pipeline is prepared and inert until an
+`NPM_TOKEN` secret is set.)
+
 ## License
 
 [Apache-2.0](./LICENSE).
