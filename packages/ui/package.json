@@ -28,12 +28,24 @@
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "default": "./dist/index.js"
+      "import": {
+        "types": "./dist/esm/index.d.ts",
+        "default": "./dist/esm/index.js"
+      },
+      "require": {
+        "types": "./dist/cjs/index.d.ts",
+        "default": "./dist/cjs/index.js"
+      }
     },
     "./tailwind-preset": {
-      "types": "./dist/tailwind.preset.d.ts",
-      "default": "./dist/tailwind.preset.js"
+      "import": {
+        "types": "./dist/esm/tailwind.preset.d.ts",
+        "default": "./dist/esm/tailwind.preset.js"
+      },
+      "require": {
+        "types": "./dist/cjs/tailwind.preset.d.ts",
+        "default": "./dist/cjs/tailwind.preset.js"
+      }
     },
     "./tokens/design-tokens.css": "./src/tokens/design-tokens.css",
     "./tokens/design-tokens.json": "./src/tokens/design-tokens.json"
@@ -48,7 +60,7 @@
     "LICENSE"
   ],
   "scripts": {
-    "build": "tsc -p tsconfig.json",
+    "build": "tsc -p tsconfig.json && tsc -p tsconfig.esm.json",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "test": "vitest run"
   },
