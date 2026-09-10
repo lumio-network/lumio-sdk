@@ -1,12 +1,14 @@
+import { forwardRef } from "react";
 import type { HTMLAttributes } from "react";
 import { cn } from "../cn";
 
 export type CardProps = HTMLAttributes<HTMLDivElement>;
 
 /** A raised surface for grouping content. Ink-tinted for the dark-mode-first product. */
-export function Card({ className, ...props }: CardProps) {
+export const Card = forwardRef<HTMLDivElement, CardProps>(({ className, ...props }, ref) => {
   return (
     <div
+      ref={ref}
       className={cn(
         "rounded-l border border-ink-700 bg-ink-900 p-6 text-paper shadow-m",
         className,
@@ -14,7 +16,9 @@ export function Card({ className, ...props }: CardProps) {
       {...props}
     />
   );
-}
+});
+
+Card.displayName = "Card";
 
 export type CardTitleProps = HTMLAttributes<HTMLHeadingElement>;
 
@@ -31,6 +35,12 @@ export function CardTitle({ className, ...props }: CardTitleProps) {
 export type CardBodyProps = HTMLAttributes<HTMLParagraphElement>;
 
 /** Muted supporting copy inside a {@link Card}. */
-export function CardBody({ className, ...props }: CardBodyProps) {
-  return <p className={cn("mt-2 font-ui text-body text-ink-400", className)} {...props} />;
-}
+export const CardBody = forwardRef<HTMLParagraphElement, CardBodyProps>(
+  ({ className, ...props }, ref) => {
+    return (
+      <p ref={ref} className={cn("mt-2 font-ui text-body text-ink-400", className)} {...props} />
+    );
+  },
+);
+
+CardBody.displayName = "CardBody";

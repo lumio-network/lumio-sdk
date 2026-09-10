@@ -1,3 +1,4 @@
+import { forwardRef } from "react";
 import type { ButtonHTMLAttributes } from "react";
 import { cn } from "../cn";
 
@@ -25,19 +26,25 @@ const SIZES: Record<ButtonSize, string> = {
  * The primary action control. Amber ("lumen") by default — the one accent the
  * design language reserves for the single most important action on a surface.
  */
-export function Button({ variant = "primary", size = "md", className, ...props }: ButtonProps) {
-  return (
-    <button
-      className={cn(
-        "inline-flex items-center justify-center gap-2 rounded-m font-ui font-semibold",
-        "transition-colors duration-fast ease-standard",
-        "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-lumen",
-        "disabled:cursor-not-allowed disabled:opacity-50",
-        VARIANTS[variant],
-        SIZES[size],
-        className,
-      )}
-      {...props}
-    />
-  );
-}
+export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
+  ({ variant = "primary", size = "md", className, type = "button", ...props }, ref) => {
+    return (
+      <button
+        ref={ref}
+        type={type}
+        className={cn(
+          "inline-flex items-center justify-center gap-2 rounded-m font-ui font-semibold",
+          "transition-colors duration-fast ease-standard",
+          "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-lumen",
+          "disabled:cursor-not-allowed disabled:opacity-50",
+          VARIANTS[variant],
+          SIZES[size],
+          className,
+        )}
+        {...props}
+      />
+    );
+  },
+);
+
+Button.displayName = "Button";
