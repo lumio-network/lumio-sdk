@@ -92,6 +92,45 @@ describe("Input", () => {
     const { getByRole } = render(<Input aria-label="styled" className="custom-class" />);
     expect(getByRole("textbox").className).toContain("custom-class");
   });
+
+  it("associates a label with the input using a generated id", () => {
+    const { getByLabelText, getByText } = render(<Input label="Amount" />);
+    const input = getByLabelText("Amount");
+    const label = getByText("Amount");
+
+    expect(input).toBeTruthy();
+    expect(label.getAttribute("for")).toBe(input.getAttribute("id"));
+  });
+
+  it("preserves a provided id and wires hint and error text to the input", () => {
+    const { getByRole, getByText } = render(
+      <Input
+        id="amount"
+        label="Amount"
+        hint="Use whole units"
+        error="Amount is required"
+        aria-describedby="external-description"
+      />,
+    );
+    const input = getByRole("textbox", { name: "Amount" });
+    const description = input.getAttribute("aria-describedby")?.split(" ");
+
+    expect(input.id).toBe("amount");
+    expect(description).toEqual(["external-description", "amount-hint", "amount-error"]);
+    expect(input.getAttribute("aria-invalid")).toBe("true");
+    expect(getByText("Use whole units").id).toBe("amount-hint");
+    expect(getByText("Amount is required").id).toBe("amount-error");
+  });
+
+  it("keeps the bare input behavior when no label or description is provided", () => {
+    const { container } = render(<Input aria-label="name" />);
+    const input = container.querySelector("input");
+
+    expect(container.firstElementChild).toBe(input);
+    expect(input?.hasAttribute("id")).toBe(false);
+    expect(input?.hasAttribute("aria-describedby")).toBe(false);
+    expect(input?.hasAttribute("aria-invalid")).toBe(false);
+  });
 });
 
 describe("Card", () => {
