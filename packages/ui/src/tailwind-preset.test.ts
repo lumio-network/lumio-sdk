@@ -25,6 +25,10 @@ function collectVariables(value: unknown, variables = new Set<string>()): Set<st
   return variables;
 }
 
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null;
+}
+
 describe("Tailwind preset token references", () => {
   it("only references CSS custom properties defined by the design tokens", () => {
     const referencedVariables = collectVariables(lumioPreset);
@@ -34,5 +38,51 @@ describe("Tailwind preset token references", () => {
 
     expect(referencedVariables.size).toBeGreaterThan(0);
     expect(missingVariables).toEqual([]);
+  });
+});
+
+describe("Tailwind preset skeleton-pulse animation", () => {
+  it("defines the skeleton-pulse animation", () => {
+    const animation = (() => {
+      const candidate = lumioPreset.theme?.extend?.animation;
+      return isRecord(candidate) ? candidate : undefined;
+    })();
+
+    expect(animation).toBeDefined();
+    expect(typeof animation?.["skeleton-pulse"] === "string").toBe(true);
+
+    const value = animation?.["skeleton-pulse"] as string | undefined;
+    expect(typeof value === "string" && value.length > 0).toBe(true);
+  });
+});
+
+describe("Tailwind preset skeleton-pulse keyframes", () => {
+  it("defines skeleton-pulse keyframes with 0% and 100% opacity stops", () => {
+    const keyframes = (() => {
+      const candidate = lumioPreset.theme?.extend?.keyframes;
+      return isRecord(candidate) ? candidate : undefined;
+    })();
+
+    expect(keyframes).toBeDefined();
+    expect(keyframes?.["skeleton-pulse"]).toBeDefined();
+
+    const entry = keyframes?.["skeleton-pulse"] as Record<string, unknown> | undefined;
+    if (!entry || !isRecord(entry)) {
+      expect.fail("skeleton-pulse keyframes must be an object of stop -> style");
+    }
+
+    expect(entry["0%"]).toBeDefined();
+    expect(entry["100%"]).toBeDefined();
+
+    const opacityAt = (stop: string): unknown => {
+      const stopValue = entry[stop];
+      if (isRecord(stopValue) && typeof (stopValue as Record<string, unknown>).opacity === "string") {
+        return (stopValue as Record<string, unknown>).opacity;
+      }
+      return undefined;
+    };
+
+    expect(opacityAt("0%")).toBeDefined();
+    expect(opacityAt("100%")).toBeDefined();
   });
 });
