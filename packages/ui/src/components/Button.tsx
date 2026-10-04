@@ -74,6 +74,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
             aria-hidden="true"
             className={cn(
               "lumio-button-spinner absolute inset-0 m-auto h-4 w-4 animate-spin motion-reduce:animate-none rounded-full border-2 border-r-transparent",
+              "lumio-button-spinner absolute inset-0 m-auto h-4 w-4 animate-spin rounded-full border-2 border-r-transparent motion-reduce:animate-none",
               SPINNER_VARIANTS[variant],
             )}
           />
