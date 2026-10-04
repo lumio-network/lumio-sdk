@@ -10,6 +10,12 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+# Least-privilege default for every job in this workflow (issue #118).
+# Jobs only read the repository (checkout, git diff) and upload the coverage
+# artifact via the Actions runtime token, so no write scopes are needed.
+permissions:
+  contents: read
+
 jobs:
   ci:
     name: lint · typecheck · build · test
