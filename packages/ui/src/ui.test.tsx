@@ -6,7 +6,7 @@ import { Badge } from "./components/Badge";
 import { Button } from "./components/Button";
 import { Card, CardBody, CardTitle } from "./components/Card";
 import { Input } from "./components/Input";
-import { Alert, Skeleton } from "./index";
+import { Alert, Skeleton, VisuallyHidden } from "./index";
 import { cn } from "./cn";
 
 // Not using vitest `globals`, so register Testing Library's DOM cleanup ourselves.
@@ -333,5 +333,40 @@ describe("Skeleton", () => {
     expect(skeleton.style.borderRadius).toBe("999px");
     expect(ref.current).toBe(skeleton);
     expect(Skeleton.displayName).toBe("Skeleton");
+  });
+});
+
+describe("VisuallyHidden", () => {
+  it("renders its children without hiding them from assistive tech", () => {
+    const { getByText } = render(
+      <VisuallyHidden>Only for screen readers</VisuallyHidden>,
+    );
+    const el = getByText("Only for screen readers");
+
+    expect(el.tagName).toBe("SPAN");
+    expect(el.getAttribute("aria-hidden")).toBeNull();
+    expect(el.className).toContain("absolute");
+    expect(el.className).toContain("h-px");
+    expect(el.className).toContain("w-px");
+    expect(el.className).toContain("overflow-hidden");
+    expect(VisuallyHidden.displayName).toBe("VisuallyHidden");
+  });
+
+  it("renders as a custom element via the as prop", () => {
+    const { getByText } = render(<VisuallyHidden as="div">Div content</VisuallyHidden>);
+    expect(getByText("Div content").tagName).toBe("DIV");
+  });
+
+  it("forwards a ref and merges a custom className", () => {
+    const ref = createRef<HTMLSpanElement>();
+    const { getByText } = render(
+      <VisuallyHidden ref={ref} className="custom-vh">
+        Text
+      </VisuallyHidden>,
+    );
+    const el = getByText("Text");
+
+    expect(ref.current).toBe(el);
+    expect(el.className).toContain("custom-vh");
   });
 });
