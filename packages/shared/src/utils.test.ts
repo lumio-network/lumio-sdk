@@ -8,9 +8,11 @@ import {
   tryParseAmount,
   approvalRate,
   approvalRateOf,
+  emptyTally,
   tallyTotal,
   getNetwork,
   getNetworkByPassphrase,
+  isNetworkName,
   isOpen,
   isTerminal,
   isValidAddress,
@@ -20,7 +22,7 @@ import {
   InvalidAmountError,
   InvalidAddressError,
 } from "./utils";
-import { CONTRACT_NAMES, NETWORKS } from "./types";
+import { CONTRACT_NAMES, NETWORKS, NETWORK_NAMES } from "./types";
 import type { ProposalStatus } from "./types";
 import type { Tally } from "./types";
 
@@ -31,15 +33,18 @@ describe("public export surface", () => {
       "InvalidAddressError",
       "InvalidAmountError",
       "NETWORKS",
+      "NETWORK_NAMES",
       "STELLAR_DECIMALS",
       "approvalRate",
       "approvalRateOf",
       "assertValidAddress",
+      "emptyTally",
       "formatAmount",
       "formatAmountFixed",
       "getNetwork",
       "getNetworkByPassphrase",
       "isContractId",
+      "isNetworkName",
       "isOpen",
       "isPublicKey",
       "isTerminal",
@@ -133,6 +138,29 @@ describe("formatAmount / parseAmount", () => {
         "decimals must be a non-negative safe integer",
       );
     }
+  });
+
+  describe("formatAmount with non-default decimals", () => {
+    it("formats fractional values at 2 decimals", () => {
+      expect(formatAmount(12345n, 2)).toBe("123.45");
+      expect(formatAmount(-12345n, 2)).toBe("-123.45");
+    });
+
+    it("trims fractional trailing zeros at a custom precision", () => {
+      expect(formatAmount(100n, 2)).toBe("1");
+      expect(formatAmount(150n, 2)).toBe("1.5");
+      expect(formatAmount(1_230_000_000_000_000_000n, 18)).toBe("1.23");
+    });
+
+    it("returns a whole number when decimals = 0", () => {
+      expect(formatAmount(5n, 0)).toBe("5");
+      expect(formatAmount(0n, 0)).toBe("0");
+      expect(formatAmount(-5n, 0)).toBe("-5");
+    });
+
+    it("formats a full fractional value at 18 decimals", () => {
+      expect(formatAmount(1_234_567_890_123_456_789n, 18)).toBe("1.234567890123456789");
+    });
   });
 
   describe("parseAmount — malformed / over-precise input", () => {
@@ -265,6 +293,28 @@ describe("CONTRACT_NAMES", () => {
   });
 });
 
+describe("emptyTally", () => {
+  it("returns a zeroed tally", () => {
+    expect(emptyTally()).toEqual({
+      yes: 0,
+      no: 0,
+      abstain: 0,
+    });
+  });
+
+  it("totals to zero via tallyTotal", () => {
+    expect(tallyTotal(emptyTally())).toBe(0);
+  });
+
+  it("returns a fresh object on every call", () => {
+    const first = emptyTally();
+    const second = emptyTally();
+
+    expect(first).toEqual(second);
+    expect(first).not.toBe(second);
+  });
+});
+
 describe("tallyTotal / approvalRateOf", () => {
   const tally: Tally = { yes: 3, no: 1, abstain: 2 };
 
@@ -313,6 +363,42 @@ describe("getNetwork", () => {
 
   it("returns undefined for an unknown passphrase", () => {
     expect(getNetworkByPassphrase("unknown passphrase")).toBeUndefined();
+  });
+});
+
+describe("NETWORK_NAMES", () => {
+  it("contains exactly the supported network names", () => {
+    expect(NETWORK_NAMES).toEqual(["testnet", "futurenet", "mainnet"]);
+  });
+
+  it("matches the keys of NETWORKS", () => {
+    expect([...NETWORK_NAMES]).toEqual(Object.keys(NETWORKS));
+  });
+});
+
+describe("isNetworkName", () => {
+  it("accepts every known network name", () => {
+    expect(isNetworkName("testnet")).toBe(true);
+    expect(isNetworkName("futurenet")).toBe(true);
+    expect(isNetworkName("mainnet")).toBe(true);
+  });
+
+  it("rejects unknown or mistyped names", () => {
+    expect(isNetworkName("unknown")).toBe(false);
+    expect(isNetworkName("")).toBe(false);
+    expect(isNetworkName("Testnet")).toBe(false);
+    expect(isNetworkName("main")).toBe(false);
+  });
+
+  it("narrows a string so it can be passed to getNetwork", () => {
+    const value: string = "testnet";
+    expect(isNetworkName(value)).toBe(true);
+    if (isNetworkName(value)) {
+      // Type-checks only when the guard narrows string → NetworkName.
+      expect(getNetwork(value).rpcUrl).toBe("https://soroban-testnet.stellar.org");
+    } else {
+      throw new Error('guard should have accepted "testnet"');
+    }
   });
 });
 

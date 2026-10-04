@@ -1,5 +1,5 @@
 import type { Address, Amount, NetworkConfig, NetworkName, ProposalStatus, Tally } from "./types";
-import { NETWORKS } from "./types";
+import { NETWORK_NAMES, NETWORKS } from "./types";
 
 /** Number of decimal places Stellar uses for native amounts. */
 export const STELLAR_DECIMALS = 7;
@@ -199,6 +199,14 @@ export function isTerminal(status: ProposalStatus): boolean {
   }
 }
 
+/**
+ * Return a zeroed {@link Tally} — the canonical empty/initial tally.
+ * A fresh object is returned on every call.
+ */
+export function emptyTally(): Tally {
+  return { yes: 0, no: 0, abstain: 0 };
+}
+
 /** Return the total number of votes, including abstentions. */
 export function tallyTotal(tally: Tally): number {
   return tally.yes + tally.no + tally.abstain;
@@ -221,6 +229,17 @@ export function getNetwork(name: NetworkName): NetworkConfig {
 /** Resolve a known network by its Stellar network passphrase. */
 export function getNetworkByPassphrase(passphrase: string): NetworkConfig | undefined {
   return Object.values(NETWORKS).find((network) => network.networkPassphrase === passphrase);
+}
+
+/**
+ * Type guard for arbitrary strings (query params, env vars, config) that may
+ * name a known network. Narrows `string` to {@link NetworkName} so the value
+ * can be passed to {@link getNetwork}.
+ *
+ * @example isNetworkName("testnet") // true
+ */
+export function isNetworkName(value: string): value is NetworkName {
+  return NETWORK_NAMES.includes(value as NetworkName);
 }
 
 /**

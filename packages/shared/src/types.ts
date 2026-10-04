@@ -96,3 +96,14 @@ export const NETWORKS = {
 } as const satisfies Record<string, NetworkConfig>;
 
 export type NetworkName = keyof typeof NETWORKS;
+
+/**
+ * Canonical list of supported network names — exactly the keys of {@link NETWORKS}.
+ * Use with {@link isNetworkName} to narrow arbitrary strings (query params,
+ * env vars, config) to a {@link NetworkName}.
+ */
+export const NETWORK_NAMES = [
+  "testnet",
+  "futurenet",
+  "mainnet",
+] as const satisfies readonly NetworkName[];
