@@ -58,6 +58,7 @@ describe("Button", () => {
     expect(button.getAttribute("aria-busy")).toBe("true");
     expect(spinner?.getAttribute("aria-hidden")).toBe("true");
     expect(spinner?.className).toContain("absolute");
+    expect(spinner?.className).toContain("motion-reduce:animate-none");
     expect(button.style.position).toBe("relative");
     expect(button.style.color).toBe("transparent");
     expect(button.className).toContain("!opacity-0");
