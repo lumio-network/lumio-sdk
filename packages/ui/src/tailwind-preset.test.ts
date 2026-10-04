@@ -2,6 +2,7 @@ import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 import { lumioPreset } from "./tailwind.preset";
+import designTokens from "./tokens/design-tokens.json";
 
 const css = readFileSync(
   fileURLToPath(new URL("./tokens/design-tokens.css", import.meta.url)),
@@ -84,5 +85,36 @@ describe("Tailwind preset skeleton-pulse keyframes", () => {
 
     expect(opacityAt("0%")).toBeDefined();
     expect(opacityAt("100%")).toBeDefined();
+  });
+});
+
+describe("Tailwind preset fontSize scale matches design tokens", () => {
+  it("every design-token typography scale entry matches the Tailwind preset", () => {
+    const fontSizeScaleEntries = Object.entries(
+      (designTokens as {
+        typography: { scale: Record<string, { size: string; line_height: string }> };
+      }).typography.scale
+    );
+
+    const presetEntries = (lumioPreset.theme?.extend?.fontSize ?? {}) as Record<string, unknown>;
+    expect(presetEntries).toBeDefined();
+
+    (() => {
+      for (const [name, tokenScale] of fontSizeScaleEntries) {
+        const presetEntry = presetEntries[name];
+        expect(presetEntry).toBeDefined();
+
+        if (!isRecord(presetEntry)) {
+          expect.fail(`fontSize["${name}"] is not an object: ${typeof presetEntry}`);
+        }
+
+        const presetEntryTyped = (presetEntry as unknown) as [string, { lineHeight?: string }];
+        const presetSize = presetEntryTyped[0];
+        const presetLineHeight = (presetEntryTyped[1] ?? {}) as { lineHeight?: string };
+
+        expect(presetSize).toBe(tokenScale.size);
+        expect(presetLineHeight.lineHeight).toBe(tokenScale.line_height);
+      }
+    })();
   });
 });
