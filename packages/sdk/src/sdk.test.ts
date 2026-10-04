@@ -33,6 +33,23 @@ describe("LumioClient", () => {
     expect(Object.isFrozen(lumio.contractIds)).toBe(true);
   });
 
+  it("stores an isolated, frozen copy of the contractIds input", () => {
+    const mutableIds: ContractIds = { ...contractIds };
+    const lumio = new LumioClient({ network: NETWORKS.testnet, contractIds: mutableIds });
+
+    // The stored value must be a different reference than the caller's object.
+    expect(lumio.contractIds).not.toBe(mutableIds);
+    expect(lumio.contractIds).toEqual(contractIds);
+
+    // Mutating the source after construction must not affect the stored copy.
+    mutableIds.treasury = "C" + "E".repeat(55);
+    mutableIds.governance = "C" + "F".repeat(55);
+
+    expect(lumio.contractIds.treasury).toBe(contractIds.treasury);
+    expect(lumio.contractIds.governance).toBe(contractIds.governance);
+    expect(lumio.contractIds).toEqual(contractIds);
+  });
+
   it("throws a contract-specific error when a contract id is invalid", () => {
     expect(
       () =>
