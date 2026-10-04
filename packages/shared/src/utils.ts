@@ -199,6 +199,14 @@ export function isTerminal(status: ProposalStatus): boolean {
   }
 }
 
+/**
+ * Return a zeroed {@link Tally} — the canonical empty/initial tally.
+ * A fresh object is returned on every call.
+ */
+export function emptyTally(): Tally {
+  return { yes: 0, no: 0, abstain: 0 };
+}
+
 /** Return the total number of votes, including abstentions. */
 export function tallyTotal(tally: Tally): number {
   return tally.yes + tally.no + tally.abstain;

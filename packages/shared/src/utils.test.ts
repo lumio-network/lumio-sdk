@@ -8,6 +8,7 @@ import {
   tryParseAmount,
   approvalRate,
   approvalRateOf,
+  emptyTally,
   tallyTotal,
   getNetwork,
   getNetworkByPassphrase,
@@ -35,6 +36,7 @@ describe("public export surface", () => {
       "approvalRate",
       "approvalRateOf",
       "assertValidAddress",
+      "emptyTally",
       "formatAmount",
       "formatAmountFixed",
       "getNetwork",
@@ -133,6 +135,29 @@ describe("formatAmount / parseAmount", () => {
         "decimals must be a non-negative safe integer",
       );
     }
+  });
+
+  describe("formatAmount with non-default decimals", () => {
+    it("formats fractional values at 2 decimals", () => {
+      expect(formatAmount(12345n, 2)).toBe("123.45");
+      expect(formatAmount(-12345n, 2)).toBe("-123.45");
+    });
+
+    it("trims fractional trailing zeros at a custom precision", () => {
+      expect(formatAmount(100n, 2)).toBe("1");
+      expect(formatAmount(150n, 2)).toBe("1.5");
+      expect(formatAmount(1_230_000_000_000_000_000n, 18)).toBe("1.23");
+    });
+
+    it("returns a whole number when decimals = 0", () => {
+      expect(formatAmount(5n, 0)).toBe("5");
+      expect(formatAmount(0n, 0)).toBe("0");
+      expect(formatAmount(-5n, 0)).toBe("-5");
+    });
+
+    it("formats a full fractional value at 18 decimals", () => {
+      expect(formatAmount(1_234_567_890_123_456_789n, 18)).toBe("1.234567890123456789");
+    });
   });
 
   describe("parseAmount — malformed / over-precise input", () => {
@@ -262,6 +287,28 @@ describe("proposal status helpers", () => {
 describe("CONTRACT_NAMES", () => {
   it("contains exactly the supported contract names", () => {
     expect(CONTRACT_NAMES).toEqual(["treasury", "governance", "dividends", "voting"]);
+  });
+});
+
+describe("emptyTally", () => {
+  it("returns a zeroed tally", () => {
+    expect(emptyTally()).toEqual({
+      yes: 0,
+      no: 0,
+      abstain: 0,
+    });
+  });
+
+  it("totals to zero via tallyTotal", () => {
+    expect(tallyTotal(emptyTally())).toBe(0);
+  });
+
+  it("returns a fresh object on every call", () => {
+    const first = emptyTally();
+    const second = emptyTally();
+
+    expect(first).toEqual(second);
+    expect(first).not.toBe(second);
   });
 });
 
