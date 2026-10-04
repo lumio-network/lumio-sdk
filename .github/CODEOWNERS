@@ -1,0 +1,10 @@
+# Replace these placeholder team slugs with confirmed organization teams.
+* @lumio-network/maintainers
+
+/packages/shared/** @lumio-network/shared-maintainers
+/packages/sdk/** @lumio-network/sdk-maintainers
+/packages/ui/** @lumio-network/ui-maintainers
+/.github/** @lumio-network/platform-maintainers
+/.changeset/** @lumio-network/release-maintainers
+**/package.json @lumio-network/release-maintainers
+/PUBLISHING.md @lumio-network/release-maintainers
