@@ -78,6 +78,6 @@
     "tailwindcss": "^3.4.14",
     "@vitest/coverage-v8": "^2.1.9",
     "typescript": "^5.6.3",
-    "vitest": "^2.1.4"
+    "vitest": "^5.0.3"
   }
 }
