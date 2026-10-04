@@ -5,7 +5,7 @@ import { cleanup, render } from "@testing-library/react";
 import { Badge } from "./components/Badge";
 import { Button } from "./components/Button";
 import { Card, CardBody, CardTitle } from "./components/Card";
-import { Input } from "./components/Input";
+import { Textarea } from "./components/Textarea";
 import { Alert, Skeleton } from "./index";
 import { cn } from "./cn";
 
@@ -110,77 +110,74 @@ describe("Button", () => {
   });
 });
 
-describe("Input", () => {
-  it("forwards a ref to the underlying <input> element", () => {
-    const ref = createRef<HTMLInputElement>();
-    const { getByRole } = render(<Input ref={ref} aria-label="test input" />);
-    expect(ref.current).toBe(getByRole("textbox", { name: "test input" }));
+describe("Textarea", () => {
+  it("forwards a ref to the underlying <textarea> element", () => {
+    const ref = createRef<HTMLTextAreaElement>();
+    const { getByRole } = render(<Textarea ref={ref} aria-label="textarea" />);
+    expect(ref.current).toBe(getByRole("textbox", { name: "textarea" }));
   });
 
-  it("defaults type to 'text'", () => {
-    const { getByRole } = render(<Input aria-label="name" />);
-    expect(getByRole("textbox").getAttribute("type")).toBe("text");
-  });
-
-  it("forwards the placeholder attribute", () => {
-    const { getByPlaceholderText } = render(<Input placeholder="Enter value" />);
-    expect(getByPlaceholderText("Enter value")).toBeTruthy();
+  it("defaults placeholder attribute", () => {
+    const { getByPlaceholderText } = render(<Textarea placeholder="Describe it" />);
+    expect(getByPlaceholderText("Describe it")).toBeTruthy();
   });
 
   it("forwards the disabled attribute", () => {
-    const { getByRole } = render(<Input aria-label="disabled field" disabled />);
-    expect((getByRole("textbox") as HTMLInputElement).disabled).toBe(true);
+    const { getByRole } = render(<Textarea aria-label="notes" disabled />);
+    expect((getByRole("textbox", { name: "notes" }) as HTMLTextAreaElement).disabled).toBe(true);
   });
 
   it("merges a custom className", () => {
-    const { getByRole } = render(<Input aria-label="styled" className="custom-class" />);
-    expect(getByRole("textbox").className).toContain("custom-class");
+    const { getByRole } = render(<Textarea aria-label="notes" className="custom-notes" />);
+    expect(getByRole("textbox", { name: "notes" }).className).toContain("custom-notes");
   });
 
-  it("associates a label with the input using a generated id", () => {
-    const { getByLabelText, getByText } = render(<Input label="Amount" />);
-    const input = getByLabelText("Amount");
-    const label = getByText("Amount");
+  it("associates a label with the textarea using a generated id", () => {
+    const { getByLabelText, getByText } = render(<Textarea label="Description" />);
+    const input = getByLabelText("Description");
+    const label = getByText("Description");
 
     expect(input).toBeTruthy();
     expect(label.getAttribute("for")).toBe(input.getAttribute("id"));
   });
 
-  it("preserves a provided id and wires hint and error text to the input", () => {
+  it("preserves a provided id and wires hint and error text to the textarea", () => {
     const { getByRole, getByText } = render(
-      <Input
-        id="amount"
-        label="Amount"
-        hint="Use whole units"
-        error="Amount is required"
-        aria-describedby="external-description"
+      <Textarea
+        id="description"
+        label="Description"
+        hint="Explain your proposal"
+        error="Description is required"
+        aria-describedby="external-help"
       />,
     );
-    const input = getByRole("textbox", { name: "Amount" });
+    const input = getByRole("textbox", { name: "Description" });
     const description = input.getAttribute("aria-describedby")?.split(" ");
 
-    expect(input.id).toBe("amount");
-    expect(description).toEqual(["external-description", "amount-hint", "amount-error"]);
+    expect(input.id).toBe("description");
+    expect(description).toEqual(["external-help", "description-hint", "description-error"]);
     expect(input.getAttribute("aria-invalid")).toBe("true");
-    expect(getByText("Use whole units").id).toBe("amount-hint");
-    expect(getByText("Amount is required").id).toBe("amount-error");
+    expect(getByText("Explain your proposal").id).toBe("description-hint");
+    expect(getByText("Description is required").id).toBe("description-error");
   });
 
   it("announces errors without making hint text a live region", () => {
-    const { getByRole, getByText } = render(<Input hint="Use whole units" error="Required" />);
+    const { getByRole, getByText } = render(
+      <Textarea hint="Explain your proposal" error="Required" />,
+    );
 
     expect(getByRole("alert").textContent).toBe("Required");
-    expect(getByText("Use whole units").getAttribute("role")).toBeNull();
+    expect(getByText("Explain your proposal").getAttribute("role")).toBeNull();
   });
 
-  it("keeps the bare input behavior when no label or description is provided", () => {
-    const { container } = render(<Input aria-label="name" />);
-    const input = container.querySelector("input");
+  it("keeps the bare textarea behavior when no label or description is provided", () => {
+    const { container } = render(<Textarea aria-label="notes" />);
+    const textarea = container.querySelector("textarea");
 
-    expect(container.firstElementChild).toBe(input);
-    expect(input?.hasAttribute("id")).toBe(false);
-    expect(input?.hasAttribute("aria-describedby")).toBe(false);
-    expect(input?.hasAttribute("aria-invalid")).toBe(false);
+    expect(container.firstElementChild).toBe(textarea);
+    expect(textarea?.hasAttribute("id")).toBe(false);
+    expect(textarea?.hasAttribute("aria-describedby")).toBe(false);
+    expect(textarea?.hasAttribute("aria-invalid")).toBe(false);
   });
 });
 
