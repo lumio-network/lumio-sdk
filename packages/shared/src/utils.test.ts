@@ -8,6 +8,7 @@ import {
   tryParseAmount,
   approvalRate,
   approvalRateOf,
+  emptyTally,
   tallyTotal,
   getNetwork,
   getNetworkByPassphrase,
@@ -35,6 +36,7 @@ describe("public export surface", () => {
       "approvalRate",
       "approvalRateOf",
       "assertValidAddress",
+      "emptyTally",
       "formatAmount",
       "formatAmountFixed",
       "getNetwork",
@@ -262,6 +264,28 @@ describe("proposal status helpers", () => {
 describe("CONTRACT_NAMES", () => {
   it("contains exactly the supported contract names", () => {
     expect(CONTRACT_NAMES).toEqual(["treasury", "governance", "dividends", "voting"]);
+  });
+});
+
+describe("emptyTally", () => {
+  it("returns a zeroed tally", () => {
+    expect(emptyTally()).toEqual({
+      yes: 0,
+      no: 0,
+      abstain: 0,
+    });
+  });
+
+  it("totals to zero via tallyTotal", () => {
+    expect(tallyTotal(emptyTally())).toBe(0);
+  });
+
+  it("returns a fresh object on every call", () => {
+    const first = emptyTally();
+    const second = emptyTally();
+
+    expect(first).toEqual(second);
+    expect(first).not.toBe(second);
   });
 });
 
