@@ -93,6 +93,33 @@ is correct for an error message; `text-coral` is not. Use bright `teal`, `coral`
 surfaces or for large graphics, and reserve `lumen-dim` on Paper for large text/icons. Do not use
 `text-lumen` on Paper.
 
+### Contrast ratios
+
+`design-tokens.json` records the measured contrast ratio of every shipped pairing under
+`color.contrast_ratios`, with a target of **AA minimum for all text pairings; AAA for primary
+brand pairings** (`meta.wcag_target`). The table below surfaces the key values so contributors can
+see *why* some tokens are restricted:
+
+| Pairing | Contrast | WCAG |
+| --- | --- | --- |
+| `ink-900` on `paper-50` | 15.31:1 | AAA ✓ |
+| `paper-50` on `ink-900` | 15.31:1 | AAA ✓ |
+| `lumen` on `ink-900` | 8.40:1 | AAA ✓ |
+| `ink-900` on `lumen` (button) | 8.40:1 | AAA ✓ |
+| `sky` on `ink-900` | 4.55:1 | AA ✓ |
+| `coral` on `ink-900` | 4.54:1 | AA ✓ |
+| `teal` on `ink-900` | 4.02:1 | AA (large text only) |
+| `teal-on-light` on `paper-50` | 5.96:1 | AA ✓ |
+| `sky-on-light` on `paper-50` | 5.11:1 | AA ✓ |
+| `coral-on-light` on `paper-50` | 4.68:1 | AA ✓ |
+| `lumen-dim` on `paper-50` | 3.20:1 | large text only |
+| `paper-600` on `paper-50` | 6.47:1 | AA ✓ |
+
+`lumen-dim` (3.20:1) falls below the 4.5:1 AA threshold for normal text, which is why the on-light
+rule reserves it for large text and icons. Bright `teal` on a dark surface (4.02:1) likewise meets
+AA only at large size — use `teal-on-light` on Paper instead. These ratios are what drive the
+on-light/dim guidance above.
+
 ## License
 
 [Apache-2.0](./LICENSE). Part of the [lumio-sdk](https://github.com/lumio-network/lumio-sdk) monorepo.
