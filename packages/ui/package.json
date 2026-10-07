@@ -37,6 +37,7 @@
         "default": "./dist/cjs/index.js"
       }
     },
+    "./package.json": "./package.json",
     "./tailwind-preset": {
       "import": {
         "types": "./dist/esm/tailwind.preset.d.ts",
