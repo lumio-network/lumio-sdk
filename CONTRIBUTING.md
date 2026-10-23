@@ -82,6 +82,11 @@ Open an issue with a clear title, a minimal reproduction (input → actual vs. e
 utility bugs), and the affected package/file. Well-scoped, evidence-backed issues get picked up
 fastest.
 
+## Code of Conduct
+
+This project follows the [Contributor Covenant Code of Conduct](./CODE_OF_CONDUCT.md).
+By participating you are expected to uphold it.
+
 ## License
 
 By contributing you agree that your contributions are licensed under the project's
