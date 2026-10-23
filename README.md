@@ -1,5 +1,9 @@
 # lumio-sdk
 
+[![CI](https://github.com/lumio-network/lumio-sdk/actions/workflows/ci.yml/badge.svg)](https://github.com/lumio-network/lumio-sdk/actions/workflows/ci.yml)
+[![License: Apache-2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://github.com/lumio-network/lumio-sdk/blob/main/LICENSE)
+[![Node >=20](https://img.shields.io/badge/Node-%3E%3D20-339933.svg)](https://nodejs.org/)
+
 **The connective layer.** TypeScript packages that glue Lumio's on-chain
 [contracts](https://github.com/lumio-network/lumio-contracts) to its
 [apps](https://github.com/lumio-network/lumio-app): a contract client, a shared UI component
