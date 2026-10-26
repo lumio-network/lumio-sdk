@@ -1,5 +1,20 @@
-import type { Address, Amount, NetworkConfig, NetworkName, ProposalStatus, Tally, VoteChoice, ContractName } from "./types";
-import { NETWORK_NAMES, NETWORKS, PROPOSAL_STATUSES, VOTE_CHOICES, CONTRACT_NAMES } from "./types";
+import type {
+  Address,
+  Amount,
+  ContractName,
+  NetworkConfig,
+  NetworkName,
+  ProposalStatus,
+  Tally,
+  VoteChoice,
+} from "./types";
+import {
+  CONTRACT_NAMES,
+  NETWORK_NAMES,
+  NETWORKS,
+  PROPOSAL_STATUSES,
+  VOTE_CHOICES,
+} from "./types";
 
 /** Number of decimal places Stellar uses for native amounts. */
 export const STELLAR_DECIMALS = 7;

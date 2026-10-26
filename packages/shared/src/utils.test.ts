@@ -1,33 +1,38 @@
-import { describe, it, expect } from "vitest";
+import { describe, expect, it } from "vitest";
 import * as shared from "./index";
 import {
-  truncateAddress,
-  formatAmount,
-  formatAmountFixed,
-  parseAmount,
-  tryParseAmount,
+  InvalidAddressError,
+  InvalidAmountError,
   approvalRate,
   approvalRateOf,
+  assertValidAddress,
   emptyTally,
-  tallyTotal,
+  formatAmount,
+  formatAmountFixed,
   getNetwork,
   getNetworkByPassphrase,
+  isContractId,
+  isContractName,
   isNetworkName,
   isOpen,
-  isTerminal,
   isProposalStatus,
-  isVoteChoice,
-  isContractName,
-  isValidAddress,
-  isContractId,
   isPublicKey,
-  assertValidAddress,
-  InvalidAmountError,
-  InvalidAddressError,
+  isTerminal,
+  isValidAddress,
+  isVoteChoice,
+  parseAmount,
+  tallyTotal,
+  truncateAddress,
+  tryParseAmount,
 } from "./utils";
-import { CONTRACT_NAMES, NETWORKS, NETWORK_NAMES, PROPOSAL_STATUSES, VOTE_CHOICES } from "./types";
-import type { ProposalStatus, VoteChoice, ContractName } from "./types";
-import type { Tally } from "./types";
+import {
+  CONTRACT_NAMES,
+  NETWORKS,
+  NETWORK_NAMES,
+  PROPOSAL_STATUSES,
+  VOTE_CHOICES,
+} from "./types";
+import type { ContractName, ProposalStatus, Tally, VoteChoice } from "./types";
 
 describe("public export surface", () => {
   it("matches the documented shared API surface", () => {
