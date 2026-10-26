@@ -1,30 +1,32 @@
-import { describe, it, expect } from "vitest";
+import { describe, expect, it } from "vitest";
 import * as shared from "./index";
 import {
-  truncateAddress,
-  formatAmount,
-  formatAmountFixed,
-  parseAmount,
-  tryParseAmount,
+  InvalidAddressError,
+  InvalidAmountError,
   approvalRate,
   approvalRateOf,
+  assertValidAddress,
   emptyTally,
-  tallyTotal,
+  formatAmount,
+  formatAmountFixed,
   getNetwork,
   getNetworkByPassphrase,
+  isContractId,
+  isContractName,
   isNetworkName,
   isOpen,
+  isProposalStatus,
+  isPublicKey,
   isTerminal,
   isValidAddress,
-  isContractId,
-  isPublicKey,
-  assertValidAddress,
-  InvalidAmountError,
-  InvalidAddressError,
+  isVoteChoice,
+  parseAmount,
+  tallyTotal,
+  truncateAddress,
+  tryParseAmount,
 } from "./utils";
-import { CONTRACT_NAMES, NETWORKS, NETWORK_NAMES } from "./types";
-import type { ProposalStatus } from "./types";
-import type { Tally } from "./types";
+import { CONTRACT_NAMES, NETWORKS, NETWORK_NAMES, PROPOSAL_STATUSES, VOTE_CHOICES } from "./types";
+import type { ContractName, Tally, VoteChoice } from "./types";
 
 describe("public export surface", () => {
   it("matches the documented shared API surface", () => {
@@ -34,7 +36,9 @@ describe("public export surface", () => {
       "InvalidAmountError",
       "NETWORKS",
       "NETWORK_NAMES",
+      "PROPOSAL_STATUSES",
       "STELLAR_DECIMALS",
+      "VOTE_CHOICES",
       "approvalRate",
       "approvalRateOf",
       "assertValidAddress",
@@ -44,11 +48,14 @@ describe("public export surface", () => {
       "getNetwork",
       "getNetworkByPassphrase",
       "isContractId",
+      "isContractName",
       "isNetworkName",
       "isOpen",
+      "isProposalStatus",
       "isPublicKey",
       "isTerminal",
       "isValidAddress",
+      "isVoteChoice",
       "parseAmount",
       "tallyTotal",
       "truncateAddress",
@@ -276,20 +283,112 @@ describe("approvalRate", () => {
 });
 
 describe("proposal status helpers", () => {
-  const statuses: ProposalStatus[] = ["open", "passed", "rejected", "executed"];
-
   it("identifies only open proposals as open", () => {
-    expect(statuses.map(isOpen)).toEqual([true, false, false, false]);
+    expect([...PROPOSAL_STATUSES].map(isOpen)).toEqual([true, false, false, false]);
   });
 
   it("identifies every completed status as terminal", () => {
-    expect(statuses.map(isTerminal)).toEqual([false, true, true, true]);
+    expect([...PROPOSAL_STATUSES].map(isTerminal)).toEqual([false, true, true, true]);
+  });
+});
+
+describe("isProposalStatus", () => {
+  it("accepts every known proposal status", () => {
+    expect(isProposalStatus("open")).toBe(true);
+    expect(isProposalStatus("passed")).toBe(true);
+    expect(isProposalStatus("rejected")).toBe(true);
+    expect(isProposalStatus("executed")).toBe(true);
+  });
+
+  it("rejects unknown or mistyped statuses", () => {
+    expect(isProposalStatus("unknown")).toBe(false);
+    expect(isProposalStatus("")).toBe(false);
+    expect(isProposalStatus("Open")).toBe(false);
+    expect(isProposalStatus("pending")).toBe(false);
+  });
+
+  it("narrows a string so it can be used as ProposalStatus", () => {
+    const value: string = "open";
+    expect(isProposalStatus(value)).toBe(true);
+    if (isProposalStatus(value)) {
+      // Type-checks only when the guard narrows string → ProposalStatus.
+      expect(isOpen(value)).toBe(true);
+    } else {
+      throw new Error('guard should have accepted "open"');
+    }
+  });
+});
+
+describe("isVoteChoice", () => {
+  it("accepts every known vote choice", () => {
+    expect(isVoteChoice("yes")).toBe(true);
+    expect(isVoteChoice("no")).toBe(true);
+    expect(isVoteChoice("abstain")).toBe(true);
+  });
+
+  it("rejects unknown or mistyped choices", () => {
+    expect(isVoteChoice("unknown")).toBe(false);
+    expect(isVoteChoice("")).toBe(false);
+    expect(isVoteChoice("Yes")).toBe(false);
+    expect(isVoteChoice("maybe")).toBe(false);
+  });
+
+  it("narrows a string so it can be used as VoteChoice", () => {
+    const value: string = "yes";
+    expect(isVoteChoice(value)).toBe(true);
+    if (isVoteChoice(value)) {
+      // Type-checks only when the guard narrows string → VoteChoice.
+      const choice: VoteChoice = value;
+      expect(choice).toBe("yes");
+    } else {
+      throw new Error('guard should have accepted "yes"');
+    }
+  });
+});
+
+describe("isContractName", () => {
+  it("accepts every known contract name", () => {
+    expect(isContractName("treasury")).toBe(true);
+    expect(isContractName("governance")).toBe(true);
+    expect(isContractName("dividends")).toBe(true);
+    expect(isContractName("voting")).toBe(true);
+  });
+
+  it("rejects unknown or mistyped contract names", () => {
+    expect(isContractName("unknown")).toBe(false);
+    expect(isContractName("")).toBe(false);
+    expect(isContractName("Treasury")).toBe(false);
+    expect(isContractName("token")).toBe(false);
+  });
+
+  it("narrows a string so it can be used as ContractName", () => {
+    const value: string = "treasury";
+    expect(isContractName(value)).toBe(true);
+    if (isContractName(value)) {
+      // Type-checks only when the guard narrows string → ContractName.
+      const name: ContractName = value;
+      expect(name).toBe("treasury");
+    } else {
+      throw new Error('guard should have accepted "treasury"');
+    }
   });
 });
 
 describe("CONTRACT_NAMES", () => {
   it("contains exactly the supported contract names", () => {
     expect(CONTRACT_NAMES).toEqual(["treasury", "governance", "dividends", "voting"]);
+  });
+});
+
+describe("PROPOSAL_STATUSES", () => {
+  it("contains exactly the four proposal statuses in order", () => {
+    expect(PROPOSAL_STATUSES).toEqual(["open", "passed", "rejected", "executed"]);
+  });
+});
+
+describe("VOTE_CHOICES", () => {
+  it("contains exactly the three vote choices", () => {
+    expect(VOTE_CHOICES).toEqual(["yes", "no", "abstain"]);
   });
 });
 

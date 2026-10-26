@@ -20,6 +20,11 @@ export const CONTRACT_NAMES = ["treasury", "governance", "dividends", "voting"] 
 
 export type ContractName = (typeof CONTRACT_NAMES)[number];
 
+/** The three possible vote choices a member can cast on a proposal. */
+export const VOTE_CHOICES = ["yes", "no", "abstain"] as const;
+
+export type VoteChoice = (typeof VOTE_CHOICES)[number];
+
 /** A member of a savings group / cooperative. */
 export interface Member {
   address: Address;
@@ -38,7 +43,10 @@ export interface Contribution {
   at: string;
 }
 
-export type ProposalStatus = "open" | "passed" | "rejected" | "executed";
+/** The four terminal states a proposal can reach. */
+export const PROPOSAL_STATUSES = ["open", "passed", "rejected", "executed"] as const;
+
+export type ProposalStatus = (typeof PROPOSAL_STATUSES)[number];
 
 /** A governance proposal the group votes on. */
 export interface Proposal {
@@ -49,8 +57,6 @@ export interface Proposal {
   /** ISO-8601 timestamp. */
   createdAt: string;
 }
-
-export type VoteChoice = "yes" | "no" | "abstain";
 
 /** A vote cast by a member on a proposal. */
 export interface Vote {
