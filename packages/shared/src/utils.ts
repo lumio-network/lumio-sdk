@@ -1,5 +1,5 @@
-import type { Address, Amount, NetworkConfig, NetworkName, ProposalStatus, Tally } from "./types";
-import { NETWORK_NAMES, NETWORKS } from "./types";
+import type { Address, Amount, NetworkConfig, NetworkName, ProposalStatus, Tally, VoteChoice, ContractName } from "./types";
+import { NETWORK_NAMES, NETWORKS, PROPOSAL_STATUSES, VOTE_CHOICES, CONTRACT_NAMES } from "./types";
 
 /** Number of decimal places Stellar uses for native amounts. */
 export const STELLAR_DECIMALS = 7;
@@ -197,6 +197,39 @@ export function isTerminal(status: ProposalStatus): boolean {
     default:
       return assertNever(status);
   }
+}
+
+/**
+ * Type guard for arbitrary strings that may name a known proposal status.
+ * Narrows `string` to {@link ProposalStatus} so untrusted input can be validated.
+ *
+ * @example isProposalStatus("open") // true
+ * @example isProposalStatus("unknown") // false
+ */
+export function isProposalStatus(value: string): value is ProposalStatus {
+  return PROPOSAL_STATUSES.includes(value as ProposalStatus);
+}
+
+/**
+ * Type guard for arbitrary strings that may name a known vote choice.
+ * Narrows `string` to {@link VoteChoice} so untrusted input can be validated.
+ *
+ * @example isVoteChoice("yes") // true
+ * @example isVoteChoice("maybe") // false
+ */
+export function isVoteChoice(value: string): value is VoteChoice {
+  return VOTE_CHOICES.includes(value as VoteChoice);
+}
+
+/**
+ * Type guard for arbitrary strings that may name a known contract.
+ * Narrows `string` to {@link ContractName} so untrusted input can be validated.
+ *
+ * @example isContractName("treasury") // true
+ * @example isContractName("unknown") // false
+ */
+export function isContractName(value: string): value is ContractName {
+  return CONTRACT_NAMES.includes(value as ContractName);
 }
 
 /**
