@@ -18,11 +18,13 @@ export type Amount = bigint;
 /** The four Lumio contracts the SDK talks to. */
 export const CONTRACT_NAMES = ["treasury", "governance", "dividends", "voting"] as const;
 
+/** A Lumio contract identifier — one of treasury, governance, dividends, or voting. */
 export type ContractName = (typeof CONTRACT_NAMES)[number];
 
 /** The three possible vote choices a member can cast on a proposal. */
 export const VOTE_CHOICES = ["yes", "no", "abstain"] as const;
 
+/** A vote choice — yes (approve), no (reject), or abstain (no opinion). */
 export type VoteChoice = (typeof VOTE_CHOICES)[number];
 
 /** A member of a savings group / cooperative. */
@@ -46,6 +48,7 @@ export interface Contribution {
 /** The four terminal states a proposal can reach. */
 export const PROPOSAL_STATUSES = ["open", "passed", "rejected", "executed"] as const;
 
+/** A proposal lifecycle state — open (voting), passed (approved), rejected (failed), or executed (enacted). */
 export type ProposalStatus = (typeof PROPOSAL_STATUSES)[number];
 
 /** A governance proposal the group votes on. */
@@ -101,6 +104,7 @@ export const NETWORKS = {
   },
 } as const satisfies Record<string, NetworkConfig>;
 
+/** A Stellar network identifier — testnet, futurenet, or mainnet. */
 export type NetworkName = keyof typeof NETWORKS;
 
 /**
