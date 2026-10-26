@@ -25,13 +25,7 @@ import {
   truncateAddress,
   tryParseAmount,
 } from "./utils";
-import {
-  CONTRACT_NAMES,
-  NETWORKS,
-  NETWORK_NAMES,
-  PROPOSAL_STATUSES,
-  VOTE_CHOICES,
-} from "./types";
+import { CONTRACT_NAMES, NETWORKS, NETWORK_NAMES, PROPOSAL_STATUSES, VOTE_CHOICES } from "./types";
 import type { ContractName, ProposalStatus, Tally, VoteChoice } from "./types";
 
 describe("public export surface", () => {

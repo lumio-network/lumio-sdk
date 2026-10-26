@@ -8,13 +8,7 @@ import type {
   Tally,
   VoteChoice,
 } from "./types";
-import {
-  CONTRACT_NAMES,
-  NETWORK_NAMES,
-  NETWORKS,
-  PROPOSAL_STATUSES,
-  VOTE_CHOICES,
-} from "./types";
+import { CONTRACT_NAMES, NETWORK_NAMES, NETWORKS, PROPOSAL_STATUSES, VOTE_CHOICES } from "./types";
 
 /** Number of decimal places Stellar uses for native amounts. */
 export const STELLAR_DECIMALS = 7;
