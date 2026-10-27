@@ -1,4 +1,4 @@
-import { isContractId, type Address, type NetworkConfig } from "@lumio/shared";
+import { InvalidAddressError, isContractId, type Address, type NetworkConfig } from "@lumio/shared";
 
 /** Options every contract client is constructed with. */
 export interface ClientOptions {
@@ -26,7 +26,7 @@ export abstract class ContractClient {
     const label = contractName ?? this.constructor.name.replace(/Client$/, "").toLowerCase();
 
     if (!isContractId(contractId)) {
-      throw new Error(`Invalid ${label} contract id "${contractId}"`);
+      throw new InvalidAddressError(contractId, label);
     }
 
     this.contractId = contractId;

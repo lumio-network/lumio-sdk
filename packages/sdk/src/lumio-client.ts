@@ -1,4 +1,10 @@
-import { isContractId, type Address, type ContractName, type NetworkConfig } from "@lumio/shared";
+import {
+  InvalidAddressError,
+  isContractId,
+  type Address,
+  type ContractName,
+  type NetworkConfig,
+} from "@lumio/shared";
 import { TreasuryClient } from "./treasury";
 import { GovernanceClient } from "./governance";
 import { DividendsClient } from "./dividends";
@@ -40,7 +46,7 @@ export class LumioClient {
       [ContractName, Address]
     >) {
       if (!isContractId(contractId)) {
-        throw new Error(`Invalid ${contractName} contract id "${contractId}"`);
+        throw new InvalidAddressError(contractId, contractName);
       }
     }
 

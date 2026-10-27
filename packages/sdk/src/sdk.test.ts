@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { NETWORKS } from "@lumio/shared";
+import { InvalidAddressError, NETWORKS } from "@lumio/shared";
 import {
   DividendsClient,
   GovernanceClient,
@@ -66,9 +66,28 @@ describe("LumioClient", () => {
       () =>
         new LumioClient({
           network: NETWORKS.testnet,
+          contractIds: {
+            ...contractIds,
+            treasury: "bad",
+          },
+        }),
+    ).toThrow(InvalidAddressError);
+
+    expect(
+      () =>
+        new LumioClient({
+          network: NETWORKS.testnet,
           contractIds: { ...contractIds, treasury: "C" + "0".repeat(55) },
         }),
     ).toThrow(/treasury/i);
+
+    expect(
+      () =>
+        new LumioClient({
+          network: NETWORKS.testnet,
+          contractIds: { ...contractIds, treasury: "C" + "0".repeat(55) },
+        }),
+    ).toThrow(InvalidAddressError);
   });
 
   it("returns typed mock data for read methods", async () => {
