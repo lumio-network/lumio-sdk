@@ -134,6 +134,19 @@ describe("formatAmount / parseAmount", () => {
     expect(formatAmountFixed(15_000_000n, 0)).toBe("2");
   });
 
+  it("formats with fractionDigits equal to decimals", () => {
+    expect(formatAmountFixed(12_500_000n, 7)).toBe("1.2500000");
+    expect(formatAmountFixed(10_000_000n, 7)).toBe("1.0000000");
+    expect(formatAmountFixed(5n, 0, 0)).toBe("5");
+  });
+
+  it("formats with fractionDigits greater than decimals", () => {
+    expect(formatAmountFixed(12_500_000n, 9)).toBe("1.250000000");
+    expect(formatAmountFixed(5n, 2, 0)).toBe("5.00");
+    expect(formatAmountFixed(10_000_000n, 10)).toBe("1.0000000000");
+    expect(formatAmountFixed(0n, 3, 0)).toBe("0.000");
+  });
+
   it("rejects invalid decimal counts in both conversion functions", () => {
     for (const decimals of [-1, 1.5, NaN, Infinity]) {
       expect(() => formatAmount(1n, decimals)).toThrow(RangeError);
@@ -248,6 +261,15 @@ describe("approvalRate", () => {
     expect(approvalRate(3, 1)).toBe(75);
     expect(approvalRate(0, 0)).toBe(0);
     expect(approvalRate(1, 2)).toBe(33.3);
+  });
+
+  it("rounds to custom decimal places", () => {
+    expect(approvalRate(1, 2, 0)).toBe(33);
+    expect(approvalRate(1, 2, 2)).toBe(33.33);
+    expect(approvalRate(2, 1, 0)).toBe(67);
+    expect(approvalRate(2, 1, 2)).toBe(66.67);
+    expect(approvalRate(1, 3, 0)).toBe(25);
+    expect(approvalRate(1, 3, 2)).toBe(25.0);
   });
 
   it("throws RangeError for negative yes", () => {
