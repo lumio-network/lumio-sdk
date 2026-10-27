@@ -183,6 +183,66 @@ describe("formatAmount / parseAmount", () => {
     });
   });
 
+  describe("formatAmountFixed — fractionDigits validation", () => {
+    it("throws RangeError for negative fractionDigits", () => {
+      expect(() => formatAmountFixed(1n, -1)).toThrow(RangeError);
+      expect(() => formatAmountFixed(1n, -1)).toThrow(
+        "fractionDigits must be a non-negative safe integer, got -1",
+      );
+    });
+
+    it("throws RangeError for non-integer fractionDigits", () => {
+      expect(() => formatAmountFixed(1n, 1.5)).toThrow(RangeError);
+      expect(() => formatAmountFixed(1n, 1.5)).toThrow(
+        "fractionDigits must be a non-negative safe integer, got 1.5",
+      );
+    });
+
+    it("throws RangeError for non-finite fractionDigits (NaN)", () => {
+      expect(() => formatAmountFixed(1n, NaN)).toThrow(RangeError);
+      expect(() => formatAmountFixed(1n, NaN)).toThrow(
+        "fractionDigits must be a non-negative safe integer, got NaN",
+      );
+    });
+
+    it("throws RangeError for non-finite fractionDigits (Infinity)", () => {
+      expect(() => formatAmountFixed(1n, Infinity)).toThrow(RangeError);
+      expect(() => formatAmountFixed(1n, Infinity)).toThrow(
+        "fractionDigits must be a non-negative safe integer, got Infinity",
+      );
+    });
+  });
+
+  describe("formatAmountFixed — decimals validation", () => {
+    it("throws RangeError for negative decimals", () => {
+      expect(() => formatAmountFixed(1n, 2, -1)).toThrow(RangeError);
+      expect(() => formatAmountFixed(1n, 2, -1)).toThrow(
+        "decimals must be a non-negative safe integer, got -1",
+      );
+    });
+
+    it("throws RangeError for non-integer decimals", () => {
+      expect(() => formatAmountFixed(1n, 2, 1.5)).toThrow(RangeError);
+      expect(() => formatAmountFixed(1n, 2, 1.5)).toThrow(
+        "decimals must be a non-negative safe integer, got 1.5",
+      );
+    });
+
+    it("throws RangeError for non-finite decimals (NaN)", () => {
+      expect(() => formatAmountFixed(1n, 2, NaN)).toThrow(RangeError);
+      expect(() => formatAmountFixed(1n, 2, NaN)).toThrow(
+        "decimals must be a non-negative safe integer, got NaN",
+      );
+    });
+
+    it("throws RangeError for non-finite decimals (Infinity)", () => {
+      expect(() => formatAmountFixed(1n, 2, Infinity)).toThrow(RangeError);
+      expect(() => formatAmountFixed(1n, 2, Infinity)).toThrow(
+        "decimals must be a non-negative safe integer, got Infinity",
+      );
+    });
+  });
+
   describe("parseAmount — malformed / over-precise input", () => {
     it("rejects over-precise input (more fractional digits than decimals)", () => {
       expect(() => parseAmount("0.123456789")).toThrow(InvalidAmountError);
@@ -235,6 +295,32 @@ describe("formatAmount / parseAmount", () => {
         }
         expect(caught).toBeInstanceOf(InvalidAmountError);
       }
+    });
+  });
+
+  describe("parseAmount — over-precision rejection with custom decimals", () => {
+    it("accepts values within custom decimals precision (decimals = 2)", () => {
+      expect(parseAmount("1.23", 2)).toBe(123n);
+      expect(parseAmount("0.5", 2)).toBe(50n);
+      expect(parseAmount("10", 2)).toBe(1000n);
+    });
+
+    it("rejects over-precise input at decimals = 2", () => {
+      expect(() => parseAmount("1.234", 2)).toThrow(InvalidAmountError);
+      expect(() => parseAmount("1.234", 2)).toThrow('Invalid amount "1.234"');
+      expect(() => parseAmount("0.001", 2)).toThrow(InvalidAmountError);
+    });
+
+    it("accepts whole numbers at decimals = 0", () => {
+      expect(parseAmount("5", 0)).toBe(5n);
+      expect(parseAmount("100", 0)).toBe(100n);
+      expect(parseAmount("0", 0)).toBe(0n);
+    });
+
+    it("rejects fractional input at decimals = 0", () => {
+      expect(() => parseAmount("5.1", 0)).toThrow(InvalidAmountError);
+      expect(() => parseAmount("5.1", 0)).toThrow('Invalid amount "5.1"');
+      expect(() => parseAmount("1.0", 0)).toThrow(InvalidAmountError);
     });
   });
 });
