@@ -7,7 +7,7 @@ import { Button } from "./components/Button";
 import { Card, CardBody, CardTitle } from "./components/Card";
 import { Input } from "./components/Input";
 import { Textarea } from "./components/Textarea";
-import { Alert, Skeleton } from "./index";
+import { Alert, Skeleton, Spinner, VisuallyHidden, Divider } from "./index";
 import { cn } from "./cn";
 
 // Not using vitest `globals`, so register Testing Library's DOM cleanup ourselves.
@@ -404,5 +404,146 @@ describe("Skeleton", () => {
     expect(skeleton.style.borderRadius).toBe("999px");
     expect(ref.current).toBe(skeleton);
     expect(Skeleton.displayName).toBe("Skeleton");
+  });
+});
+
+describe("Spinner", () => {
+  it("renders with role status and an accessible label", () => {
+    const { container } = render(<Spinner />);
+    const spinner = container.firstElementChild as HTMLDivElement;
+
+    expect(spinner.getAttribute("role")).toBe("status");
+    expect(spinner.getAttribute("aria-label")).toBe("Loading");
+  });
+
+  it("accepts a custom label", () => {
+    const { container } = render(<Spinner label="Processing" />);
+    const spinner = container.firstElementChild as HTMLDivElement;
+
+    expect(spinner.getAttribute("aria-label")).toBe("Processing");
+  });
+
+  it("applies the md size by default", () => {
+    const { container } = render(<Spinner />);
+    const spinner = container.firstElementChild as HTMLDivElement;
+
+    expect(spinner.className).toContain("h-6");
+    expect(spinner.className).toContain("w-6");
+  });
+
+  it("applies the sm size", () => {
+    const { container } = render(<Spinner size="sm" />);
+    const spinner = container.firstElementChild as HTMLDivElement;
+
+    expect(spinner.className).toContain("h-4");
+    expect(spinner.className).toContain("w-4");
+  });
+
+  it("applies the lg size", () => {
+    const { container } = render(<Spinner size="lg" />);
+    const spinner = container.firstElementChild as HTMLDivElement;
+
+    expect(spinner.className).toContain("h-8");
+    expect(spinner.className).toContain("w-8");
+  });
+
+  it("includes animate-spin and respects reduced motion", () => {
+    const { container } = render(<Spinner />);
+    const spinner = container.firstElementChild as HTMLDivElement;
+
+    expect(spinner.className).toContain("animate-spin");
+    expect(spinner.className).toContain("motion-reduce:animate-none");
+  });
+
+  it("forwards a ref and sets its display name", () => {
+    const ref = createRef<HTMLDivElement>();
+    const { container } = render(<Spinner ref={ref} />);
+
+    expect(ref.current).toBe(container.firstElementChild);
+    expect(Spinner.displayName).toBe("Spinner");
+  });
+
+  it("merges a custom className", () => {
+    const { container } = render(<Spinner className="custom-spinner" />);
+    expect((container.firstElementChild as HTMLDivElement).className).toContain("custom-spinner");
+  });
+});
+
+describe("VisuallyHidden", () => {
+  it("renders its children in the DOM but applies sr-only styles", () => {
+    const { getByText } = render(<VisuallyHidden>Hidden text</VisuallyHidden>);
+    const element = getByText("Hidden text");
+
+    expect(element).toBeTruthy();
+    expect(element.className).toContain("sr-only");
+  });
+
+  it("renders as a span by default", () => {
+    const { container } = render(<VisuallyHidden>Hidden text</VisuallyHidden>);
+    const element = container.firstElementChild as HTMLElement;
+
+    expect(element.tagName).toBe("SPAN");
+  });
+
+  it("accepts a custom element via the as prop", () => {
+    const { container } = render(<VisuallyHidden as="div">Hidden div</VisuallyHidden>);
+    const element = container.firstElementChild as HTMLElement;
+
+    expect(element.tagName).toBe("DIV");
+    expect(element.className).toContain("sr-only");
+  });
+
+  it("is not aria-hidden and is accessible to screen readers", () => {
+    const { getByText } = render(<VisuallyHidden>Accessible</VisuallyHidden>);
+    const element = getByText("Accessible");
+
+    expect(element.getAttribute("aria-hidden")).toBeNull();
+  });
+
+  it("forwards a ref and sets its display name", () => {
+    const ref = createRef<HTMLElement>();
+    const { getByText } = render(<VisuallyHidden ref={ref}>Ref test</VisuallyHidden>);
+
+    expect(ref.current).toBe(getByText("Ref test"));
+    expect(VisuallyHidden.displayName).toBe("VisuallyHidden");
+  });
+
+  it("merges a custom className", () => {
+    const { getByText } = render(<VisuallyHidden className="custom-class">Hidden</VisuallyHidden>);
+    expect(getByText("Hidden").className).toContain("custom-class");
+  });
+});
+
+describe("Divider", () => {
+  it("renders as a separator with horizontal orientation by default", () => {
+    const { container } = render(<Divider />);
+    const divider = container.firstElementChild as HTMLHRElement;
+
+    expect(divider.tagName).toBe("HR");
+    expect(divider.getAttribute("aria-orientation")).toBe("horizontal");
+    expect(divider.className).toContain("border-t");
+    expect(divider.className).toContain("border-ink-700");
+  });
+
+  it("applies vertical orientation styles", () => {
+    const { container } = render(<Divider orientation="vertical" />);
+    const divider = container.firstElementChild as HTMLHRElement;
+
+    expect(divider.getAttribute("aria-orientation")).toBe("vertical");
+    expect(divider.className).toContain("border-l");
+    expect(divider.className).toContain("border-ink-700");
+  });
+
+  it("forwards a ref and sets its display name", () => {
+    const ref = createRef<HTMLHRElement>();
+    const { container } = render(<Divider ref={ref} />);
+
+    expect(ref.current).toBe(container.firstElementChild);
+    expect(Divider.displayName).toBe("Divider");
+  });
+
+  it("merges a custom className", () => {
+    const { container } = render(<Divider className="custom-divider" />);
+    expect((container.firstElementChild as HTMLHRElement).className).toContain("custom-divider");
   });
 });
