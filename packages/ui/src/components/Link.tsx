@@ -1,10 +1,11 @@
 import { forwardRef } from "react";
-import type { AnchorHTMLAttributes } from "react";
+import type { AnchorHTMLAttributes, ReactNode } from "react";
 import { cn } from "../cn";
 
 export interface LinkProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
   /** Use `text-sky` for dark surfaces instead of the default `text-sky-on-light`. */
   onDark?: boolean;
+  children: ReactNode;
 }
 
 /**
@@ -12,7 +13,7 @@ export interface LinkProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
  * the visible focus treatment used across the library.
  */
 export const Link = forwardRef<HTMLAnchorElement, LinkProps>(
-  ({ onDark = false, className, ...props }, ref) => {
+  ({ onDark = false, className, children, ...props }, ref) => {
     return (
       <a
         ref={ref}
@@ -24,7 +25,9 @@ export const Link = forwardRef<HTMLAnchorElement, LinkProps>(
           className,
         )}
         {...props}
-      />
+      >
+        {children}
+      </a>
     );
   },
 );
