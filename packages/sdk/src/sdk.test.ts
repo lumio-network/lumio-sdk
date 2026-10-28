@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { InvalidAddressError, NETWORKS } from "@lumio/shared";
+import * as sdk from "./index";
 import {
   DividendsClient,
   GovernanceClient,
@@ -20,6 +21,56 @@ const contractIds: ContractIds = {
 function makeClient(): LumioClient {
   return new LumioClient({ network: NETWORKS.testnet, contractIds });
 }
+
+describe("public export surface", () => {
+  it("exports SDK-specific classes and types", () => {
+    const sdkKeys = Object.keys(sdk).sort();
+
+    // SDK's own named exports
+    expect(sdkKeys).toContain("ContractClient");
+    expect(sdkKeys).toContain("NotImplementedError");
+    expect(sdkKeys).toContain("TreasuryClient");
+    expect(sdkKeys).toContain("GovernanceClient");
+    expect(sdkKeys).toContain("DividendsClient");
+    expect(sdkKeys).toContain("VotingClient");
+    expect(sdkKeys).toContain("LumioClient");
+  });
+
+  it("re-exports key symbols from @lumio/shared", () => {
+    const sdkKeys = Object.keys(sdk).sort();
+
+    // Representative shared symbols (constants, types, utilities, errors)
+    expect(sdkKeys).toContain("NETWORKS");
+    expect(sdkKeys).toContain("NETWORK_NAMES");
+    expect(sdkKeys).toContain("CONTRACT_NAMES");
+    expect(sdkKeys).toContain("PROPOSAL_STATUSES");
+    expect(sdkKeys).toContain("VOTE_CHOICES");
+    expect(sdkKeys).toContain("STELLAR_DECIMALS");
+    expect(sdkKeys).toContain("formatAmount");
+    expect(sdkKeys).toContain("formatAmountFixed");
+    expect(sdkKeys).toContain("parseAmount");
+    expect(sdkKeys).toContain("tryParseAmount");
+    expect(sdkKeys).toContain("isValidAddress");
+    expect(sdkKeys).toContain("isContractId");
+    expect(sdkKeys).toContain("isPublicKey");
+    expect(sdkKeys).toContain("assertValidAddress");
+    expect(sdkKeys).toContain("truncateAddress");
+    expect(sdkKeys).toContain("approvalRate");
+    expect(sdkKeys).toContain("approvalRateOf");
+    expect(sdkKeys).toContain("tallyTotal");
+    expect(sdkKeys).toContain("emptyTally");
+    expect(sdkKeys).toContain("getNetwork");
+    expect(sdkKeys).toContain("getNetworkByPassphrase");
+    expect(sdkKeys).toContain("isNetworkName");
+    expect(sdkKeys).toContain("isContractName");
+    expect(sdkKeys).toContain("isProposalStatus");
+    expect(sdkKeys).toContain("isVoteChoice");
+    expect(sdkKeys).toContain("isOpen");
+    expect(sdkKeys).toContain("isTerminal");
+    expect(sdkKeys).toContain("InvalidAmountError");
+    expect(sdkKeys).toContain("InvalidAddressError");
+  });
+});
 
 describe("LumioClient", () => {
   it("wires each contract client with its id and the shared network", () => {
@@ -211,5 +262,133 @@ describe("individual contract clients", () => {
       voting.castVote(1, contractIds.voting, "yes"),
       "VotingClient.castVote",
     );
+  });
+
+  it("rejects invalid contract ids in TreasuryClient constructor", () => {
+    expect(
+      () =>
+        new TreasuryClient({
+          contractId: "bad",
+          network: NETWORKS.testnet,
+        }),
+    ).toThrow(InvalidAddressError);
+    expect(
+      () =>
+        new TreasuryClient({
+          contractId: "bad",
+          network: NETWORKS.testnet,
+        }),
+    ).toThrow(/treasury/i);
+
+    expect(
+      () =>
+        new TreasuryClient({
+          contractId: "C" + "0".repeat(55),
+          network: NETWORKS.testnet,
+        }),
+    ).toThrow(InvalidAddressError);
+    expect(
+      () =>
+        new TreasuryClient({
+          contractId: "C" + "0".repeat(55),
+          network: NETWORKS.testnet,
+        }),
+    ).toThrow(/treasury/i);
+  });
+
+  it("rejects invalid contract ids in GovernanceClient constructor", () => {
+    expect(
+      () =>
+        new GovernanceClient({
+          contractId: "bad",
+          network: NETWORKS.testnet,
+        }),
+    ).toThrow(InvalidAddressError);
+    expect(
+      () =>
+        new GovernanceClient({
+          contractId: "bad",
+          network: NETWORKS.testnet,
+        }),
+    ).toThrow(/governance/i);
+
+    expect(
+      () =>
+        new GovernanceClient({
+          contractId: "C" + "0".repeat(55),
+          network: NETWORKS.testnet,
+        }),
+    ).toThrow(InvalidAddressError);
+    expect(
+      () =>
+        new GovernanceClient({
+          contractId: "C" + "0".repeat(55),
+          network: NETWORKS.testnet,
+        }),
+    ).toThrow(/governance/i);
+  });
+
+  it("rejects invalid contract ids in DividendsClient constructor", () => {
+    expect(
+      () =>
+        new DividendsClient({
+          contractId: "bad",
+          network: NETWORKS.testnet,
+        }),
+    ).toThrow(InvalidAddressError);
+    expect(
+      () =>
+        new DividendsClient({
+          contractId: "bad",
+          network: NETWORKS.testnet,
+        }),
+    ).toThrow(/dividends/i);
+
+    expect(
+      () =>
+        new DividendsClient({
+          contractId: "C" + "0".repeat(55),
+          network: NETWORKS.testnet,
+        }),
+    ).toThrow(InvalidAddressError);
+    expect(
+      () =>
+        new DividendsClient({
+          contractId: "C" + "0".repeat(55),
+          network: NETWORKS.testnet,
+        }),
+    ).toThrow(/dividends/i);
+  });
+
+  it("rejects invalid contract ids in VotingClient constructor", () => {
+    expect(
+      () =>
+        new VotingClient({
+          contractId: "bad",
+          network: NETWORKS.testnet,
+        }),
+    ).toThrow(InvalidAddressError);
+    expect(
+      () =>
+        new VotingClient({
+          contractId: "bad",
+          network: NETWORKS.testnet,
+        }),
+    ).toThrow(/voting/i);
+
+    expect(
+      () =>
+        new VotingClient({
+          contractId: "C" + "0".repeat(55),
+          network: NETWORKS.testnet,
+        }),
+    ).toThrow(InvalidAddressError);
+    expect(
+      () =>
+        new VotingClient({
+          contractId: "C" + "0".repeat(55),
+          network: NETWORKS.testnet,
+        }),
+    ).toThrow(/voting/i);
   });
 });

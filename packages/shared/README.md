@@ -20,6 +20,106 @@ formatAmount(12_500_000n);            // "1.25"  (7-decimal Stellar amounts)
 parseAmount("1.25");                  // 12500000n
 ```
 
+## Types
+
+The package exports shared domain types describing the core Lumio platform entities and their lifecycle states.
+
+### Primitive Types
+
+- **`Address`** — A Stellar account or contract address in string form (`"G…"` / `"C…"`).
+- **`Amount`** — A signed on-chain integer amount carried as `bigint` off-chain to avoid floating-point loss. Stellar amounts use 7 decimal places.
+
+### Contract and Network Types
+
+- **`ContractName`** — One of `"treasury"`, `"governance"`, `"dividends"`, or `"voting"` — the four Lumio contracts the SDK talks to.
+- **`NetworkName`** — One of `"testnet"`, `"futurenet"`, or `"mainnet"` — the supported Stellar networks.
+- **`NetworkConfig`** — Connection details for a Stellar/Soroban network:
+
+```ts
+interface NetworkConfig {
+  rpcUrl: string;
+  networkPassphrase: string;
+}
+```
+
+### Governance and Voting Types
+
+- **`ProposalStatus`** — One of `"open"`, `"passed"`, `"rejected"`, or `"executed"` — the four lifecycle states a proposal can reach.
+- **`VoteChoice`** — One of `"yes"`, `"no"`, or `"abstain"` — the three possible vote choices a member can cast on a proposal.
+
+- **`Proposal`** — A governance proposal the group votes on:
+
+```ts
+interface Proposal {
+  id: number;
+  proposer: Address;
+  title: string;
+  status: ProposalStatus;
+  createdAt: string; // ISO-8601 timestamp
+}
+```
+
+- **`Vote`** — A vote cast by a member on a proposal:
+
+```ts
+interface Vote {
+  proposalId: number;
+  voter: Address;
+  choice: VoteChoice;
+}
+```
+
+- **`Tally`** — Aggregated vote counts for a proposal:
+
+```ts
+interface Tally {
+  yes: number;
+  no: number;
+  abstain: number;
+}
+```
+
+### Treasury and Member Types
+
+- **`Member`** — A member of a savings group / cooperative:
+
+```ts
+interface Member {
+  address: Address;
+  displayName?: string;
+  joinedAt: string; // ISO-8601 timestamp
+}
+```
+
+- **`Contribution`** — A single contribution paid into the treasury during a cycle:
+
+```ts
+interface Contribution {
+  member: Address;
+  amount: Amount;
+  cycle: number; // 1-based rotation cycle
+  at: string; // ISO-8601 timestamp
+}
+```
+
+- **`Dividend`** — A payout share owed to a member for a given cycle:
+
+```ts
+interface Dividend {
+  member: Address;
+  share: Amount;
+  cycle: number;
+}
+```
+
+### Constants
+
+- **`CONTRACT_NAMES`** — Array of the four contract names: `["treasury", "governance", "dividends", "voting"]`.
+- **`PROPOSAL_STATUSES`** — Array of the four proposal statuses: `["open", "passed", "rejected", "executed"]`.
+- **`VOTE_CHOICES`** — Array of the three vote choices: `["yes", "no", "abstain"]`.
+- **`NETWORKS`** — Well-known Stellar networks configuration object with `testnet`, `futurenet`, and `mainnet`.
+- **`NETWORK_NAMES`** — Array of network names: `["testnet", "futurenet", "mainnet"]`.
+
 ## Utilities
 
 The package exports a set of pure helpers beside the shared domain types.
