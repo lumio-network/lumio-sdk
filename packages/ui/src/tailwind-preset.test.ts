@@ -45,8 +45,7 @@ describe("Tailwind preset token references", () => {
 
   it("defines the skeleton-pulse keyframes with opacity stops", () => {
     const keyframes = lumioPreset.theme?.extend?.keyframes as
-      | Record<string, Record<string, { opacity: string }>>
-      | undefined;
+      Record<string, Record<string, { opacity: string }>> | undefined;
     expect(keyframes).toBeDefined();
     expect(keyframes?.["skeleton-pulse"]).toBeDefined();
     expect(keyframes?.["skeleton-pulse"]?.["0%"]).toEqual({ opacity: "0.45" });
