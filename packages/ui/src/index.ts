@@ -25,4 +25,6 @@ export { Skeleton, type SkeletonProps } from "./components/Skeleton";
 export { Spinner, type SpinnerProps, type SpinnerSize } from "./components/Spinner";
 export { VisuallyHidden, type VisuallyHiddenProps } from "./components/VisuallyHidden";
 export { Divider, type DividerProps, type DividerOrientation } from "./components/Divider";
+export { Code, type CodeProps } from "./components/Code";
+export { Link, type LinkProps } from "./components/Link";
 export { tokens, type DesignTokens } from "./tokens/design-tokens";

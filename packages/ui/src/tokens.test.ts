@@ -49,6 +49,9 @@ function getExpectedCssVariables(): Map<string, string> {
   for (const [name, value] of Object.entries(designTokens.motion)) {
     add(name, value);
   }
+  for (const [name, value] of Object.entries(designTokens.focus)) {
+    add(`focus-${name}`, value);
+  }
 
   return expected;
 }

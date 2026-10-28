@@ -7,7 +7,7 @@ import { Button } from "./components/Button";
 import { Card, CardBody, CardTitle } from "./components/Card";
 import { Input } from "./components/Input";
 import { Textarea } from "./components/Textarea";
-import { Alert, Skeleton, Spinner, VisuallyHidden, Divider } from "./index";
+import { Alert, Skeleton, Spinner, VisuallyHidden, Divider, Code, Link } from "./index";
 import { cn } from "./cn";
 
 // Not using vitest `globals`, so register Testing Library's DOM cleanup ourselves.
@@ -545,5 +545,101 @@ describe("Divider", () => {
   it("merges a custom className", () => {
     const { container } = render(<Divider className="custom-divider" />);
     expect((container.firstElementChild as HTMLHRElement).className).toContain("custom-divider");
+  });
+});
+
+describe("Code", () => {
+  it("renders a code element with mono font and data token classes", () => {
+    const { container } = render(<Code>0xABC123</Code>);
+    const code = container.firstElementChild as HTMLElement;
+
+    expect(code.tagName).toBe("CODE");
+    expect(code.className).toContain("font-mono");
+    expect(code.className).toContain("text-data");
+    expect(code.className).toContain("text-paper");
+  });
+
+  it("applies the subtle background and padding treatment", () => {
+    const { container } = render(<Code>Contract ID</Code>);
+    const code = container.firstElementChild as HTMLElement;
+
+    expect(code.className).toContain("bg-ink-800");
+    expect(code.className).toContain("rounded-s");
+    expect(code.className).toContain("px-1");
+  });
+
+  it("forwards a ref and sets its display name", () => {
+    const ref = createRef<HTMLElement>();
+    const { getByText } = render(<Code ref={ref}>Ref test</Code>);
+
+    expect(ref.current).toBe(getByText("Ref test"));
+    expect(Code.displayName).toBe("Code");
+  });
+
+  it("merges a custom className", () => {
+    const { container } = render(<Code className="custom-code">Test</Code>);
+    expect((container.firstElementChild as HTMLElement).className).toContain("custom-code");
+  });
+});
+
+describe("Link", () => {
+  it("renders an anchor element with sky-on-light text by default", () => {
+    const { getByRole } = render(<Link href="/docs">Documentation</Link>);
+    const link = getByRole("link", { name: "Documentation" });
+
+    expect(link.tagName).toBe("A");
+    expect(link.className).toContain("text-sky-on-light");
+    expect(link.getAttribute("href")).toBe("/docs");
+  });
+
+  it("applies text-sky when onDark is true", () => {
+    const { getByRole } = render(
+      <Link href="/docs" onDark>
+        Documentation
+      </Link>,
+    );
+    const link = getByRole("link", { name: "Documentation" });
+
+    expect(link.className).toContain("text-sky");
+    expect(link.className).not.toContain("text-sky-on-light");
+  });
+
+  it("underlines on hover and focus", () => {
+    const { getByRole } = render(<Link href="/help">Help</Link>);
+    const link = getByRole("link", { name: "Help" });
+
+    expect(link.className).toContain("hover:underline");
+    expect(link.className).toContain("focus-visible:underline");
+  });
+
+  it("includes the visible focus treatment", () => {
+    const { getByRole } = render(<Link href="/about">About</Link>);
+    const link = getByRole("link", { name: "About" });
+
+    expect(link.className).toContain("focus-visible:outline");
+    expect(link.className).toContain("focus-visible:outline-2");
+    expect(link.className).toContain("focus-visible:outline-offset-2");
+    expect(link.className).toContain("focus-visible:outline-lumen");
+  });
+
+  it("forwards a ref and sets its display name", () => {
+    const ref = createRef<HTMLAnchorElement>();
+    const { getByRole } = render(
+      <Link ref={ref} href="/test">
+        Test link
+      </Link>,
+    );
+
+    expect(ref.current).toBe(getByRole("link", { name: "Test link" }));
+    expect(Link.displayName).toBe("Link");
+  });
+
+  it("merges a custom className", () => {
+    const { getByRole } = render(
+      <Link href="/custom" className="custom-link">
+        Custom
+      </Link>,
+    );
+    expect(getByRole("link", { name: "Custom" }).className).toContain("custom-link");
   });
 });

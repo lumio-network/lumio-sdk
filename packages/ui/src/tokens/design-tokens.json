@@ -82,6 +82,11 @@
     "duration-base": "220ms",
     "duration-slow": "400ms"
   },
+  "focus": {
+    "ring-color": "#F2A63D",
+    "ring-width": "2px",
+    "ring-offset": "2px"
+  },
   "logo": {
     "symbol_concept": "A ring (the full contribution cycle / the group) with one lit dot on its edge (the member currently receiving the payout). Transparent by construction — everyone can see whose turn it is.",
     "minimum_sizes": { "favicon": "16px", "app_icon": "512px master, exported down", "print_symbol_alone": "8mm width" },
