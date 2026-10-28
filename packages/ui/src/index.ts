@@ -22,4 +22,7 @@ export { Input, type InputProps } from "./components/Input";
 export { Textarea, type TextareaProps } from "./components/Textarea";
 export { Alert, type AlertProps, type AlertVariant } from "./components/Alert";
 export { Skeleton, type SkeletonProps } from "./components/Skeleton";
+export { Spinner, type SpinnerProps, type SpinnerSize } from "./components/Spinner";
+export { VisuallyHidden, type VisuallyHiddenProps } from "./components/VisuallyHidden";
+export { Divider, type DividerProps, type DividerOrientation } from "./components/Divider";
 export { tokens, type DesignTokens } from "./tokens/design-tokens";
