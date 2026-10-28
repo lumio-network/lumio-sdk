@@ -13,10 +13,7 @@ export const Code = forwardRef<HTMLElement, CodeProps>(({ className, ...props },
   return (
     <code
       ref={ref}
-      className={cn(
-        "rounded-s bg-ink-800 px-1 font-mono text-data text-paper",
-        className,
-      )}
+      className={cn("rounded-s bg-ink-800 px-1 font-mono text-data text-paper", className)}
       {...props}
     />
   );
