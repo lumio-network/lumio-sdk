@@ -35,4 +35,20 @@ describe("Tailwind preset token references", () => {
     expect(referencedVariables.size).toBeGreaterThan(0);
     expect(missingVariables).toEqual([]);
   });
+
+  it("defines the skeleton-pulse animation", () => {
+    const animation = lumioPreset.theme?.extend?.animation as Record<string, string> | undefined;
+    expect(animation).toBeDefined();
+    expect(animation?.["skeleton-pulse"]).toBeDefined();
+    expect(animation?.["skeleton-pulse"]).toContain("skeleton-pulse");
+  });
+
+  it("defines the skeleton-pulse keyframes with opacity stops", () => {
+    const keyframes = lumioPreset.theme?.extend?.keyframes as
+      Record<string, Record<string, { opacity: string }>> | undefined;
+    expect(keyframes).toBeDefined();
+    expect(keyframes?.["skeleton-pulse"]).toBeDefined();
+    expect(keyframes?.["skeleton-pulse"]?.["0%"]).toEqual({ opacity: "0.45" });
+    expect(keyframes?.["skeleton-pulse"]?.["100%"]).toEqual({ opacity: "1" });
+  });
 });

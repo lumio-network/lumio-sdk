@@ -182,6 +182,22 @@ describe("Input", () => {
     expect(input?.hasAttribute("aria-describedby")).toBe(false);
     expect(input?.hasAttribute("aria-invalid")).toBe(false);
   });
+
+  it("applies the focus-visible ring and border classes", () => {
+    const { getByRole } = render(<Input aria-label="focused field" />);
+    const className = getByRole("textbox").className;
+
+    expect(className).toContain("focus-visible:ring-lumen");
+    expect(className).toContain("focus-visible:border-lumen");
+  });
+
+  it("applies the disabled opacity and cursor classes", () => {
+    const { getByRole } = render(<Input aria-label="disabled field" disabled />);
+    const className = getByRole("textbox").className;
+
+    expect(className).toContain("disabled:opacity-50");
+    expect(className).toContain("disabled:cursor-not-allowed");
+  });
 });
 
 describe("Textarea", () => {
@@ -384,6 +400,28 @@ describe("Alert", () => {
 
     expect(ref.current).toBe(getByRole("status"));
     expect(Alert.displayName).toBe("Alert");
+  });
+
+  it("allows overriding the default role for a variant", () => {
+    const { getByRole } = render(
+      <Alert variant="info" role="alert">
+        Override role
+      </Alert>,
+    );
+
+    expect(getByRole("alert")).toBeTruthy();
+  });
+
+  it("merges a custom className with the variant styles", () => {
+    const { getByRole } = render(
+      <Alert variant="success" className="custom-alert">
+        Custom class
+      </Alert>,
+    );
+    const alert = getByRole("status");
+
+    expect(alert.className).toContain("custom-alert");
+    expect(alert.className).toContain("border-teal-on-light");
   });
 });
 
