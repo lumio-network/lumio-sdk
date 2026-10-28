@@ -86,6 +86,24 @@ export const lumioPreset: Partial<Config> = {
         base: "var(--lumio-duration-base)",
         slow: "var(--lumio-duration-slow)",
       },
+      ringColor: {
+        lumen: "var(--lumio-focus-ring-color)",
+      },
+      ringWidth: {
+        2: "var(--lumio-focus-ring-width)",
+      },
+      ringOffsetWidth: {
+        2: "var(--lumio-focus-ring-offset)",
+      },
+      outlineColor: {
+        lumen: "var(--lumio-focus-ring-color)",
+      },
+      outlineWidth: {
+        2: "var(--lumio-focus-ring-width)",
+      },
+      outlineOffset: {
+        2: "var(--lumio-focus-ring-offset)",
+      },
       animation: {
         "skeleton-pulse":
           "skeleton-pulse var(--lumio-duration-slow) var(--lumio-ease-standard) infinite alternate",

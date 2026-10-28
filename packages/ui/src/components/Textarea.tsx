@@ -47,7 +47,7 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
             "min-h-24 w-full rounded-m border border-ink-600 bg-ink-800 px-3 py-2 font-ui text-body text-paper",
             "placeholder:text-ink-400",
             "transition-colors duration-fast ease-standard",
-            "focus-visible:border-lumen focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lumen",
+            "focus-visible:border-lumen focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lumen focus-visible:ring-offset-2 focus-visible:ring-offset-ink-800",
             "disabled:cursor-not-allowed disabled:opacity-50",
             className,
           )}

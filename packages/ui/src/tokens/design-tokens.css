@@ -64,4 +64,9 @@
   --lumio-duration-fast: 120ms;
   --lumio-duration-base: 220ms;
   --lumio-duration-slow: 400ms;
+
+  /* Focus */
+  --lumio-focus-ring-color: #F2A63D;
+  --lumio-focus-ring-width: 2px;
+  --lumio-focus-ring-offset: 2px;
 }
