@@ -21,7 +21,7 @@
     "release": "turbo run build && changeset publish"
   },
   "devDependencies": {
-    "@changesets/cli": "^2.27.9",
+    "@changesets/cli": "^3.0.3",
     "@eslint/js": "^9.14.0",
     "@types/node": "^22.9.0",
     "eslint": "^9.14.0",
